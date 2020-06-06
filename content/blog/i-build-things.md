@@ -1,15 +1,21 @@
 ---
 path: I-build-things
 date: 2020-06-06T05:14:58.167Z
-title: I-build-things
-description: I-build-things
+title: I build things
+description: 制造”东西，区别于记录东西，是要从现实中拔高来表达表象之下的事物。
 ---
-I-build-thingsI-build-thingsI-build-thingsI-build-thingsI-build-things
+标题这句话是我的Instagram上的签名，译成中文则是，我造东西。我觉得这话特别酷，几乎道出把照片拍好的真理：要“制造”东西。而“制造”东西，区别于记录东西，是要从现实中拔高来表达表象之下的事物。
 
-I-build-thingsI-build-thingsI-build-thingsI-build-things
 
-I-build-thingsI-build-thingsI-build-things
 
-I-build-thingsI-build-things
+我第一次产生对摄影的冲动还是在某次旅行的时候，看到层峦叠嶂的山峰，突然觉得如果不把眼前的景象拍下来，就好像路过一个宝藏却不愿弯腰去捡，多么傲慢。从此我拿起相机开始纪录东西，到现在算是勉强可以说能“造”点东西。
 
-![best image TEXT](/../assets/jf5hesmdehxq-kcpmxqdpqd2wv_psnog2mce6vrsas.jpg "best image TITLE")
+
+
+我有时会想，自己大学才开始真正接触摄影，连半吊子的摄影爱好者都勉强算不上，跟那些正儿八经是art school里读出来的学生相比，差距就更大了。他们在学校的时候就完成了有关摄影的一切物质形式的学习，不同画幅的相机使用、灯光使用、胶片转数码训练、相纸认识和使用、商业摄影的拍摄方法。当你还在为外景光线运用而苦恼的时候，人家已经开始玩影棚布光。但，如果因此放弃摄影，我岂不是等于放弃了能成为“能欣赏艺术”的那类人的最短捷径？要知道摄影可以算是所有艺术类别里门槛最低的了。世界上最贵的摄影作品的价格跟世界上最贵的画作价格也几乎不是一个数量级的。
+
+
+
+所以说，说到“制造东西”，摄影和写字算是目前成本最低的方式。而很不幸的是，对我这种人来说，形而下的乐趣就是比形而上的乐趣多很多。到最后写字我没有坚持下来，但是真心希望摄影可以。也算是为自己那点浅薄的审美寻找一个出路和交代。
+
+![Rhein II](/../assets/jf5hesmdehxq-kcpmxqdpqd2wv_psnog2mce6vrsas.jpg "世界上最贵的照片 - 莱茵河2号")
