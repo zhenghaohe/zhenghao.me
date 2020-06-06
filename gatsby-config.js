@@ -6,7 +6,9 @@ module.exports = {
     description: `Personal blog by Zhenghao He.`,
     siteUrl: `https://gatsby-starter-blog-demo.netlify.com/`,
     social: {
-      twitter: `gatsbyjs`,
+      linkedin: `https://www.linkedin.com/in/zhenghao-he-720510117/`,
+      github: `https://github.com/zhenghaohe`,
+      instagram: `https://www.instagram.com/aurapporo/`,
     },
   },
   plugins: [
@@ -55,11 +57,9 @@ module.exports = {
           {
             resolve: `gatsby-remark-images`,
             options: {
-              maxWidth: 590,
+              maxWidth: 700,
               showCaptions: true,
-              linkImagesToOriginal: false,
               withWebp: true,
-              backgroundColor: "red",
             },
           },
           {

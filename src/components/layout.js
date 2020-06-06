@@ -104,6 +104,14 @@ class Layout extends React.Component {
 
 const Wrapper = styled.div`
   min-height: 100vh;
+  figure {
+    text-align: center;
+    figcaption {
+      color: grey;
+      font-size: ${fontSizes.smallish};
+      margin-top: 0.5rem;
+    }
+  }
 `
 
 const Footer = styled.footer`
