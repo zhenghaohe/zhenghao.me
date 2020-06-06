@@ -1,6 +1,5 @@
 import React from "react"
 import { Link } from "gatsby"
-// import Transition from "../components/transition"
 import styled, { css } from "styled-components"
 import { rhythm, scale } from "../utils/typography"
 import { theme, mixins } from "@styles"
@@ -32,7 +31,6 @@ export default ({ children, location }) => {
     let header
 
     if (location.pathname === rootPath || location.pathname === blogPath) {
-      debugger
       header = (
         <h1
           style={{
@@ -54,7 +52,6 @@ export default ({ children, location }) => {
         </h1>
       )
     } else {
-      debugger
       header = (
         <h3
           style={{
