@@ -7,6 +7,7 @@ import Bio from "../components/bio"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { rhythm, scale } from "../utils/typography"
+import Tag from "@components/tag"
 
 class BlogPostTemplate extends React.Component {
   render() {
@@ -31,6 +32,7 @@ class BlogPostTemplate extends React.Component {
             }}
           >
             {post.frontmatter.date}
+            <Tag type={post.frontmatter.tag} location="blog" />
           </p>
           <MDXRenderer>{post.body}</MDXRenderer>
           <hr
@@ -88,6 +90,7 @@ export const pageQuery = graphql`
         title
         date(formatString: "MMMM DD, YYYY")
         description
+        tag
       }
     }
   }

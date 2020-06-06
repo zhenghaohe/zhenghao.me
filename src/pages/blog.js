@@ -8,7 +8,7 @@ import SEO from "../components/seo"
 import { rhythm } from "../utils/typography"
 import Button from "../components/button"
 import { theme } from "@styles"
-
+import Tag from "@components/tag"
 const { colors, fontSizes } = theme
 
 class Blog extends React.Component {
@@ -64,10 +64,14 @@ class Blog extends React.Component {
                       </Link>
                     </h3>
                     <small>{node.frontmatter.date}</small>
+                    <Tag type={node.frontmatter.tag} location="blog" />
                     <p
                       dangerouslySetInnerHTML={{
                         __html: node.frontmatter.description || node.excerpt,
                       }}
+                      css={css`
+                        margin-top: 0.5rem;
+                      `}
                     />
                   </div>
                 )
@@ -103,6 +107,7 @@ export const pageQuery = graphql`
             date(formatString: "MMMM DD, YYYY")
             title
             description
+            tag
           }
         }
       }

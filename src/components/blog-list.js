@@ -1,10 +1,11 @@
 import React from "react"
 import { StaticQuery, graphql } from "gatsby"
-import styled from "styled-components"
+import styled, { css } from "styled-components"
 
 import { theme, media } from "@styles"
 
 import HomePageLink from "@components/link"
+import Tag from "./tag"
 
 const { fontSizes } = theme
 
@@ -33,10 +34,14 @@ export default () => {
                     </HomePageLink>
                   </h3>
                   <small>{node.frontmatter.date}</small>
+                  <Tag type={node.frontmatter.tag} location="homepage" />
                   <p
                     dangerouslySetInnerHTML={{
                       __html: node.frontmatter.description || node.excerpt,
                     }}
+                    css={css`
+                      margin-top: 0.3rem;
+                    `}
                   />
                 </div>
               )
@@ -89,6 +94,7 @@ const blogListQuery = graphql`
             date(formatString: "MMMM DD, YYYY")
             title
             description
+            tag
           }
         }
       }

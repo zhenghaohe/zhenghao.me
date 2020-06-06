@@ -3,7 +3,9 @@ path: awesome-images
 date: 2020-06-06T01:22:55.506Z
 title: Awesome Images
 description: Fix for gatsby-plugin-mdx and gatsby-remark-images
+tag: personal
 ---
+
 ![Great Gatsby](/../assets/great2.jpg "Great Gatsby")
 
 ## Netlify CMS Media Configuration
@@ -38,24 +40,23 @@ If you try this…
 ```
 
 ```javascript
-
 const Counter = ({ max, step }) => {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(0)
 
   const increment = () => {
-    setCount((count) => {
-      if (count >= max) return count;
-      return count + step;
-    });
+    setCount(count => {
+      if (count >= max) return count
+      return count + step
+    })
 
-    console.log('count', count);
-  };
+    console.log("count", count)
+  }
 
   useEffect(() => {
-    document.title = `count ${count}`;
-  }, [count]);
+    document.title = `count ${count}`
+  }, [count])
 
-  const decrement = () => setCount(count - 1);
+  const decrement = () => setCount(count - 1)
 
   return (
     <div className="Counter">
@@ -66,8 +67,8 @@ const Counter = ({ max, step }) => {
         <button>Reset</button>
       </section>
     </div>
-  );
-};
+  )
+}
 ```
 
 …everything works as it should.

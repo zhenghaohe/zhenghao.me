@@ -2,7 +2,8 @@ const theme = {
   colors: {
     slate: "#3f3f44;",
     white: "#f7f7f7",
-    red: "#91250a",
+    red: "#bf705c",
+    lightRed: "#f5eae6",
     lightNavy: "#c4c8d3",
     navy: "#30475e",
     offWhite: "#e9e9e6",
