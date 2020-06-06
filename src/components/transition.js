@@ -7,7 +7,6 @@ import {
 const timeout = 300
 const getTransitionStyles = {
   entering: {
-    position: `absolute`,
     opacity: 0,
   },
   entered: {
