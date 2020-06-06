@@ -19,7 +19,7 @@ export default () => {
           <BlogContainer
             id="blog-list"
             data-sal="slide-up"
-            data-sal-delay="100"
+            data-sal-delay="50"
             data-sal-duration="1000"
             data-sal-easing="ease"
           >
