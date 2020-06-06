@@ -1,19 +1,37 @@
 import React from "react"
 import { Link } from "gatsby"
+import Transition from "../components/transition"
 import styled, { css } from "styled-components"
 import { rhythm, scale } from "../utils/typography"
 import { theme, mixins } from "@styles"
+import NavDot from "@components/nav-dot"
 
 const { colors, fontSizes } = theme
 
-class Layout extends React.Component {
-  render() {
-    const { location, title, children } = this.props
+export default ({ children, location }) => {
+  if (location.pathname.includes("blog")) {
+    const Wrapper = styled.div`
+      min-height: 100vh;
+      figure {
+        text-align: center;
+        figcaption {
+          color: grey;
+          font-size: ${fontSizes.smallish};
+          margin-top: 0.5rem;
+        }
+      }
+    `
+
+    const Footer = styled.footer`
+      text-align: center;
+      padding: 2rem;
+    `
     const rootPath = `${__PATH_PREFIX__}/`
     const blogPath = `${__PATH_PREFIX__}/blog/`
     let header
 
     if (location.pathname === rootPath || location.pathname === blogPath) {
+      debugger
       header = (
         <h1
           style={{
@@ -30,11 +48,12 @@ class Layout extends React.Component {
             }}
             to={location.pathname === blogPath ? `/blog/` : `/`}
           >
-            {title}
+            title
           </Link>
         </h1>
       )
     } else {
+      debugger
       header = (
         <h3
           style={{
@@ -50,13 +69,14 @@ class Layout extends React.Component {
             }}
             to={`/blog/`}
           >
-            {title}
+            title
           </Link>
         </h3>
       )
     }
+
     return (
-      <>
+      <Transition location={location}>
         <Wrapper>
           <div
             style={{
@@ -68,14 +88,14 @@ class Layout extends React.Component {
           >
             <header
               css={css`
-                ${mixins.link}
-                color: ${colors.navy};
-                h1 {
-                  font-size: ${fontSizes.xxxlarge} !important;
+          ${mixins.link}
+          color: ${colors.navy};
+          h1 {
+            font-size: ${fontSizes.xxxlarge} !important;
 
-                }
+          }
 
-              `}
+        `}
             >
               {header}
             </header>
@@ -97,26 +117,20 @@ class Layout extends React.Component {
             <a href="https://www.gatsbyjs.org">Gatsby</a>
           </Footer>
         </Wrapper>
-      </>
+      </Transition>
     )
   }
+
+  const Wrapper = styled.div`
+    display: grid;
+    grid-template-columns:
+      [content-start] 12fr
+      [content-end sidebar-start] 2fr [sidebar-end];
+  `
+  return (
+    <Transition location={location}>
+      <NavDot />
+      <Wrapper>{children}</Wrapper>
+    </Transition>
+  )
 }
-
-const Wrapper = styled.div`
-  min-height: 100vh;
-  figure {
-    text-align: center;
-    figcaption {
-      color: grey;
-      font-size: ${fontSizes.smallish};
-      margin-top: 0.5rem;
-    }
-  }
-`
-
-const Footer = styled.footer`
-  text-align: center;
-  padding: 2rem;
-`
-
-export default Layout
