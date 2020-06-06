@@ -1,10 +1,11 @@
 import React from "react"
 import { Link } from "gatsby"
-import Transition from "../components/transition"
+// import Transition from "../components/transition"
 import styled, { css } from "styled-components"
 import { rhythm, scale } from "../utils/typography"
 import { theme, mixins } from "@styles"
 import NavDot from "@components/nav-dot"
+import PageTransition from "gatsby-plugin-page-transitions"
 
 const { colors, fontSizes } = theme
 
@@ -76,8 +77,8 @@ export default ({ children, location }) => {
     }
 
     return (
-      <Transition location={location}>
-        <Wrapper>
+      <Wrapper>
+        <PageTransition transitionTime={500}>
           <div
             style={{
               marginLeft: `auto`,
@@ -116,8 +117,8 @@ export default ({ children, location }) => {
             © {new Date().getFullYear()}, Built with
             <a href="https://www.gatsbyjs.org">Gatsby</a>
           </Footer>
-        </Wrapper>
-      </Transition>
+        </PageTransition>
+      </Wrapper>
     )
   }
 
@@ -128,9 +129,9 @@ export default ({ children, location }) => {
       [content-end sidebar-start] 2fr [sidebar-end];
   `
   return (
-    <Transition location={location}>
+    <PageTransition transitionTime={500}>
       <NavDot />
       <Wrapper>{children}</Wrapper>
-    </Transition>
+    </PageTransition>
   )
 }

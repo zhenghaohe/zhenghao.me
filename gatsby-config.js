@@ -14,6 +14,12 @@ module.exports = {
   plugins: [
     `gatsby-plugin-layout`,
     {
+      resolve: "gatsby-plugin-page-transitions",
+      options: {
+        transitionTime: 500,
+      },
+    },
+    {
       resolve: `gatsby-plugin-scroll-reveal`,
       options: {
         threshold: 0.1, // Percentage of an element's area that needs to be visible to launch animation
