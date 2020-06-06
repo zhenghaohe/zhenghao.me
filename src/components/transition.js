@@ -15,7 +15,6 @@ const getTransitionStyles = {
     opacity: 1,
   },
   exiting: {
-    transition: `opacity 0ms ease-in-out`,
     opacity: 0,
   },
 }
