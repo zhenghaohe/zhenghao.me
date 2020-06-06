@@ -4,7 +4,7 @@ import styled, { css } from "styled-components"
 import { rhythm, scale } from "../utils/typography"
 import { theme, mixins } from "@styles"
 import NavDot from "@components/nav-dot"
-import PageTransition from "gatsby-plugin-page-transitions"
+import Transition from "../components/transition"
 
 const { colors, fontSizes } = theme
 
@@ -74,8 +74,8 @@ export default ({ children, location }) => {
     }
 
     return (
-      <Wrapper>
-        <PageTransition transitionTime={500}>
+      <Transition location={location}>
+        <Wrapper>
           <div
             style={{
               marginLeft: `auto`,
@@ -114,8 +114,8 @@ export default ({ children, location }) => {
             © {new Date().getFullYear()}, Built with
             <a href="https://www.gatsbyjs.org">Gatsby</a>
           </Footer>
-        </PageTransition>
-      </Wrapper>
+        </Wrapper>
+      </Transition>
     )
   }
 
@@ -126,9 +126,9 @@ export default ({ children, location }) => {
       [content-end sidebar-start] 2fr [sidebar-end];
   `
   return (
-    <PageTransition transitionTime={500}>
+    <Transition location={location}>
       <NavDot />
       <Wrapper>{children}</Wrapper>
-    </PageTransition>
+    </Transition>
   )
 }
