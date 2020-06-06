@@ -18,13 +18,13 @@ const Main = () => {
       >
         <div
           css={css`
-            margin-top: 50vh;
+            margin-top: 40vh;
             margin-bottom: 20vh;
             ${media.tablet`margin-top: clamp(60vw, 60vh, 80vw);`};
           `}
-          data-sal="fade"
-          data-sal-delay="100"
-          data-sal-duration="1000"
+          // data-sal="fade"
+          // data-sal-delay="100"
+          // data-sal-duration="1000"
         >
           <h1
             className="heading"
