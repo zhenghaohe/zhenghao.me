@@ -37,4 +37,37 @@ If you try this…
 },
 ```
 
+```javascript
+
+const Counter = ({ max, step }) => {
+  const [count, setCount] = useState(0);
+
+  const increment = () => {
+    setCount((count) => {
+      if (count >= max) return count;
+      return count + step;
+    });
+
+    console.log('count', count);
+  };
+
+  useEffect(() => {
+    document.title = `count ${count}`;
+  }, [count]);
+
+  const decrement = () => setCount(count - 1);
+
+  return (
+    <div className="Counter">
+      <p className="count">{count}</p>
+      <section className="controls">
+        <button onClick={increment}>Increment</button>
+        <button onClick={decrement}>Decrement</button>
+        <button>Reset</button>
+      </section>
+    </div>
+  );
+};
+```
+
 …everything works as it should.
