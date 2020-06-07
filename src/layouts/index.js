@@ -4,6 +4,8 @@ import styled, { css } from "styled-components"
 import { rhythm, scale } from "../utils/typography"
 import { theme, mixins } from "@styles"
 import NavDot from "@components/nav-dot"
+import Logo from "@components/logo"
+
 import Transition from "../components/transition"
 
 const { colors, fontSizes } = theme
@@ -35,19 +37,18 @@ export default ({ children, location }) => {
         <h1
           style={{
             ...scale(1.8),
-            marginBottom: rhythm(1.5),
             marginTop: 0,
           }}
         >
           <Link
-            style={{
-              boxShadow: `none`,
-              textDecoration: `none`,
-              color: `inherit`,
-            }}
+            css={css`
+              box-shadow: none;
+              text-decoration: none;
+              color: inherit;
+            `}
             to={location.pathname === blogPath ? `/blog/` : `/`}
           >
-            title
+            Zhenghao's Blog
           </Link>
         </h1>
       )
@@ -67,7 +68,7 @@ export default ({ children, location }) => {
             }}
             to={`/blog/`}
           >
-            title
+            Zhenghao's Blog
           </Link>
         </h3>
       )
