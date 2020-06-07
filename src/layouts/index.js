@@ -116,10 +116,7 @@ export default ({ children, location }) => {
           >
             {children}
           </main>
-          <Footer>
-            © {new Date().getFullYear()}, Built with
-            <a href="https://www.gatsbyjs.org">Gatsby</a>
-          </Footer>
+          <Footer>© {new Date().getFullYear()}, Zhenghao He</Footer>
         </Wrapper>
       </Transition>
     )

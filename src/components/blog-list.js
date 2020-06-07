@@ -1,9 +1,10 @@
 import React from "react"
-import { StaticQuery, graphql } from "gatsby"
+import { StaticQuery, graphql, Link } from "gatsby"
 import styled, { css } from "styled-components"
 
 import { theme, media } from "@styles"
 
+import Button from "@components/button"
 import HomePageLink from "@components/link"
 import Tag from "./tag"
 
@@ -50,8 +51,11 @@ export default () => {
                 </div>
               )
             })}
-
-            <GoToBlogBtn to="/blog/">Go To My Blog</GoToBlogBtn>
+            <Link to="/blog/">
+              <Button marginTop="4rem" marginBottom="4rem">
+                read my blog
+              </Button>
+            </Link>
           </BlogContainer>
         )
       }}

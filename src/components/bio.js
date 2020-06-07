@@ -34,8 +34,8 @@ function Bio() {
               }}
             />
             <p>
-              I’m Zhenghao He and this is my blog. I write stuff in English and
-              Chinese on here.
+              I’m Zhenghao He and this is my blog. I write stuff in both English
+              and Chinese on here.
             </p>
           </Container>
         )

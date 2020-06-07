@@ -13,7 +13,8 @@ export default () => {
     <StaticQuery
       query={bioQuery2}
       render={data => {
-        const { author } = data.site.siteMetadata
+        const { author, social } = data.site.siteMetadata
+        const { linkedin, github, instagram } = social
         return (
           <AboutSection id="about-section">
             <PicContainer>
@@ -38,18 +39,17 @@ export default () => {
               <p>Hi. 你好.</p>
               <p>
                 My name is Zhenghao He(贺征豪). I am a software engineer based
-                in Vancouver. I work at Amazon Web Services (AWS), building web
-                apps primarily using React, TypeScript, Web Components and
-                WebGl.
+                in Vancouver, Canada. I work at Amazon Web Services (AWS),
+                building web apps primarily using React, TypeScript, Web
+                Components and WebGl.
               </p>
               <p>
                 I was born and raised in China. I used to live in Chengdu before
-                I moved to Vancouver. I also lived in Taipei for a while. And I
-                hope one day I can move to Japan.
+                I moved to Vancouver. I also lived in Taipei for a while.
               </p>
               <p>
                 Outside of programming, I enjoy taking pictures, drawing and
-                doing meditation.I have been also practising Stoicism for one
+                doing meditation. I have been also practising Stoicism for one
                 year.
               </p>
             </div>
@@ -67,13 +67,13 @@ export default () => {
               >
                 You can also find me on
               </p>
-              <a href="" className="socialmedia-link">
+              <a href={linkedin} className="socialmedia-link">
                 linkedin
               </a>
-              <a href="" className="socialmedia-link">
+              <a href={github} className="socialmedia-link">
                 github
               </a>
-              <a href="" className="socialmedia-link">
+              <a href={instagram} className="socialmedia-link">
                 instagram
               </a>
             </div>
@@ -174,7 +174,7 @@ const AboutSection = styled.section`
     font-size: 2rem;
     align-self: center;
     padding-right: 2rem;
-
+    margin-top: 1rem;
     ${media.tablet`
     font-size: 1.8rem;
     padding: 2rem 2rem 2rem 4rem;
@@ -223,6 +223,11 @@ const bioQuery2 = graphql`
     site {
       siteMetadata {
         author
+        social {
+          linkedin
+          github
+          instagram
+        }
       }
     }
   }
