@@ -96,7 +96,7 @@ export default ({ children, location }) => {
           ${mixins.link}
           color: ${colors.navy};
           h1 {
-            font-size: ${fontSizes.xxxlarge} !important;
+            font-size: ${fontSizes.xxlarge} !important;
 
           }
 
