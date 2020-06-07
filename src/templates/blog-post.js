@@ -8,6 +8,7 @@ import { rhythm, scale } from "../utils/typography"
 import Tag from "@components/tag"
 import { theme, mixins, media } from "@styles"
 
+const { colors } = theme
 class BlogPostTemplate extends React.Component {
   render() {
     const post = this.props.data.mdx
@@ -121,7 +122,7 @@ const Wrapper = styled.article`
   .tip-left {
     grid-column: 1 / span 1;
     text-align: right;
-    border-right: 2px solid var(--yellow);
+    border-right: 2px solid ${colors.navy};
     ${media.thone`
     grid-column: 1 / -1;
   `};
@@ -129,7 +130,7 @@ const Wrapper = styled.article`
 
   .tip-right {
     grid-column: span 1 / -1;
-    border-left: 2px solid var(--yellow);
+    border-left: 2px solid ${colors.navy};
     ${media.thone`
     grid-column: 1 / -1;
   `};
