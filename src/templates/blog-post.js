@@ -41,6 +41,7 @@ class BlogPostTemplate extends React.Component {
         <hr
           style={{
             marginBottom: rhythm(1),
+            marginTop: rhythm(1),
           }}
         />
         <FooterContainer>
@@ -99,7 +100,6 @@ const Wrapper = styled.article`
   }
 
   > .full-bleed {
-    margin: 0;
     grid-column: 1 / -1;
   }
 
@@ -122,16 +122,26 @@ const Wrapper = styled.article`
     grid-column: 1 / span 1;
     text-align: right;
     border-right: 2px solid var(--yellow);
+    ${media.thone`
+    grid-column: 1 / -1;
+  `};
   }
 
   .tip-right {
     grid-column: span 1 / -1;
     border-left: 2px solid var(--yellow);
+    ${media.thone`
+    grid-column: 1 / -1;
+  `};
   }
 
   a {
     color: black;
-    text-decoration: underline wavy yellowgreen;
+    text-decoration: none;
+    box-shadow: 0 1px 0 0 currentColor;
+    background-position: bottom;
+    background-size: 20%;
+    transition: none;
   }
 `
 
