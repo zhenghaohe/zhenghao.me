@@ -4,7 +4,6 @@ import styled, { css } from "styled-components"
 import { rhythm, scale } from "../utils/typography"
 import { theme, mixins } from "@styles"
 import NavDot from "@components/nav-dot"
-import Logo from "@components/logo"
 
 import Transition from "../components/transition"
 
@@ -12,18 +11,7 @@ const { colors, fontSizes } = theme
 
 export default ({ children, location }) => {
   if (location.pathname.includes("blog")) {
-    const Wrapper = styled.div`
-      min-height: 100vh;
-      figure {
-        text-align: center;
-        figcaption {
-          color: grey;
-          font-size: ${fontSizes.smallish};
-          margin-top: 0.5rem;
-        }
-      }
-    `
-
+    // Layout for blog
     const Footer = styled.footer`
       text-align: center;
       padding: 2rem;
@@ -31,8 +19,17 @@ export default ({ children, location }) => {
     const rootPath = `${__PATH_PREFIX__}/`
     const blogPath = `${__PATH_PREFIX__}/blog/`
     let header
+    let Wrapper
 
     if (location.pathname === rootPath || location.pathname === blogPath) {
+      Wrapper = styled.div`
+        min-height: 100vh;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: ${rhythm(24)};
+        padding: ${rhythm(1.5)} ${rhythm(3 / 4)};
+      `
+
       header = (
         <h1
           style={{
@@ -53,11 +50,28 @@ export default ({ children, location }) => {
         </h1>
       )
     } else {
+      // Full Bleed Style
+      Wrapper = styled.div`
+        min-height: 100vh;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100vw;
+        figure {
+          text-align: center;
+          figcaption {
+            color: grey;
+            font-size: ${fontSizes.smallish};
+            margin-top: 0.5rem;
+          }
+        }
+      `
       header = (
         <h3
           style={{
             fontFamily: `Montserrat, sans-serif`,
-            marginTop: 0,
+            marginTop: "3rem",
+            marginLeft: "3rem",
+            marginBottom: "-3rem",
           }}
         >
           <Link
@@ -77,16 +91,8 @@ export default ({ children, location }) => {
     return (
       <Transition location={location}>
         <Wrapper>
-          <div
-            style={{
-              marginLeft: `auto`,
-              marginRight: `auto`,
-              maxWidth: rhythm(24),
-              padding: `${rhythm(1.5)} ${rhythm(3 / 4)}`,
-            }}
-          >
-            <header
-              css={css`
+          <header
+            css={css`
           ${mixins.link}
           color: ${colors.navy};
           h1 {
@@ -95,22 +101,21 @@ export default ({ children, location }) => {
           }
 
         `}
-            >
-              {header}
-            </header>
-            <main
-              css={css`
-                a {
-                  ${mixins.inlineLink}
-                }
-                .blog-nav a {
-                  ${mixins.link}
-                }
-              `}
-            >
-              {children}
-            </main>
-          </div>
+          >
+            {header}
+          </header>
+          <main
+            css={css`
+              a {
+                ${mixins.inlineLink}
+              }
+              .blog-nav a {
+                ${mixins.link}
+              }
+            `}
+          >
+            {children}
+          </main>
           <Footer>
             © {new Date().getFullYear()}, Built with
             <a href="https://www.gatsbyjs.org">Gatsby</a>
@@ -119,6 +124,8 @@ export default ({ children, location }) => {
       </Transition>
     )
   }
+
+  // layout for homepage
 
   const Wrapper = styled.div`
     display: grid;

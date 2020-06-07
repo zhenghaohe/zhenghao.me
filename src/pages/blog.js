@@ -56,7 +56,11 @@ class Blog extends React.Component {
                   </Link>
                 </h3>
                 <small>{node.frontmatter.date}</small>
-                <Tag type={node.frontmatter.tag} location="blog" />
+                <Tag
+                  type={node.frontmatter.tag}
+                  location="blog"
+                  position="left"
+                />
                 <p
                   dangerouslySetInnerHTML={{
                     __html: node.frontmatter.description || node.excerpt,
@@ -70,7 +74,7 @@ class Blog extends React.Component {
           })}
         </div>
         <Link to="/">
-          <Button marginTop="85px">Go Home</Button>
+          <Button marginTop="85px">homepage</Button>
         </Link>
       </div>
     )

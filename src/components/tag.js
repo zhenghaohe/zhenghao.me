@@ -3,9 +3,8 @@ import styled, { css } from "styled-components"
 import { theme, media } from "@styles"
 
 const { fontSizes, colors } = theme
-
-export default ({ type, location }) => (
-  <Wrapper>
+export default ({ type, location, position }) => (
+  <Wrapper position={position}>
     <Tag type={type} location={location}>
       {type}
     </Tag>
@@ -14,6 +13,8 @@ export default ({ type, location }) => (
 
 const Wrapper = styled.div`
   display: flex;
+  justify-content: ${props =>
+    props.position === "left" ? "flex-start" : "center"};
 `
 const Tag = styled.span`
   font-size: ${props =>

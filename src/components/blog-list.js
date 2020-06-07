@@ -34,7 +34,11 @@ export default () => {
                     </HomePageLink>
                   </h3>
                   <small>{node.frontmatter.date}</small>
-                  <Tag type={node.frontmatter.tag} location="homepage" />
+                  <Tag
+                    type={node.frontmatter.tag}
+                    location="homepage"
+                    position="left"
+                  />
                   <p
                     dangerouslySetInnerHTML={{
                       __html: node.frontmatter.description || node.excerpt,
