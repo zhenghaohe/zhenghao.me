@@ -9,53 +9,53 @@ If you are writing React, you definitely are no stranger to \`setState\` and  \`
 
 We are going to take a look at a very simple counter. Out of the box, it doesn’t have a lot going on.
 
-\`\``js
+\`\``jsx
 
 class Counter extends Component {
 
-  state = { count: 0 };
+state = { count: 0 };
 
-  increment = () => {
+increment = () => {
 
-\    this.setState({ count: this.state.count + 1 });
+this.setState({ count: this.state.count + 1 });
 
-  };
+};
 
-  decrement = () => {
+decrement = () => {
 
-\    this.setState({ count: this.state.count - 1 });
+this.setState({ count: this.state.count - 1 });
 
-  };
+};
 
-  reset = () => {
+reset = () => {
 
-\    this.setState({ count: 0 });
+ this.setState({ count: 0 });
 
-  };
+};
 
-  render() {
+render() {
 
-\    return (
+return (
 
-\    <main className="Counter">
+ <main className="Counter">
 
-\    <p className="count">{this.state.count}</p>
+ <p className="count">{this.state.count}</p>
 
-\    <section className="controls">
+ <section className="controls">
 
-\    <button onClick={this.increment}>Increment</button>
+ <button onClick={this.increment}>Increment</button>
 
-\    <button onClick={this.decrement}>Decrement</button>
+ <button onClick={this.decrement}>Decrement</button>
 
-\    <button onClick={this.reset}>Reset</button>
+ <button onClick={this.reset}>Reset</button>
 
-\    </section>
+ </section>
 
-\    </main>
+ </main>
 
-\    );
+ );
 
-  }
+}
 
 }
 
@@ -65,19 +65,17 @@ render(<Counter />, document.getElementById('root'));
 
 <iframe
 
-\    src="https://codesandbox.io/embed/counter-class-based-kf380?fontsize=14&hidenavigation=1&theme=dark"
+ src="https://codesandbox.io/embed/counter-class-based-kf380?fontsize=14&hidenavigation=1&theme=dark"
 
-\    style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+ style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
 
-\    title="counter-class-based"
+ title="counter-class-based"
 
-\    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+ allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
 
-\    sandbox="allow-autoplay allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+ sandbox="allow-autoplay allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 
 \></iframe>
-
-
 
 \### useState
 
@@ -89,15 +87,13 @@ let’s say we refactored \`increment()\` as follows:
 
 increment() {
 
-  this.setState({ count: this.state.count + 1 });
+this.setState({ count: this.state.count + 1 });
 
-  this.setState({ count: this.state.count + 1 });
+this.setState({ count: this.state.count + 1 });
 
-  this.setState({ count: this.state.count + 1 });
+this.setState({ count: this.state.count + 1 });
 
-
-
-  console.log(this.state.count);
+console.log(this.state.count);
 
 }
 
@@ -119,19 +115,17 @@ Now we refactored \`increment()\`  again as follows:
 
 \`\``js
 
-  increment = () => {
+increment = () => {
 
-\    this.setState({ count: this.state.count + 1 });
+ this.setState({ count: this.state.count + 1 });
 
-\    this.setState({ count: this.state.count + 2 });
+ this.setState({ count: this.state.count + 2 });
 
-\    this.setState({ count: this.state.count + 3 });
+ this.setState({ count: this.state.count + 3 });
 
+ console.log('this.state.count', this.state.count);
 
-
-\    console.log('this.state.count', this.state.count);
-
-  };
+};
 
 \`\``
 
@@ -157,11 +151,7 @@ yourThirdCallToSetState
 
 )
 
-
-
 // or 
-
-
 
 const newState = {
 
@@ -172,8 +162,6 @@ const newState = {
 ... yourThirdCallToSetState
 
 }
-
-
 
 \`\``
 
@@ -187,7 +175,7 @@ This means that we can refactor \`increment()\` as follows.
 
 this.setState(state => {
 
-  return { count: state.count + 1 };
+return { count: state.count + 1 };
 
 });
 
@@ -199,11 +187,11 @@ Or use destructuring to make it evening cleaner.
 
 increment() {
 
-  this.setState(({ count }) => {
+this.setState(({ count }) => {
 
-\    return { count: count + 1 };
+ return { count: count + 1 };
 
-  });
+});
 
 }
 
@@ -215,17 +203,17 @@ If we rewrite the previous increment into
 
 \`\``js
 
-  increment = () => {
+increment = () => {
 
-\    this.setState(({ count }) => ({ count: count + 1 }));
+ this.setState(({ count }) => ({ count: count + 1 }));
 
-\    this.setState(({ count }) => ({ count: count + 1 }));
+ this.setState(({ count }) => ({ count: count + 1 }));
 
-\    this.setState(({ count }) => ({ count: count + 1 }));
+ this.setState(({ count }) => ({ count: count + 1 }));
 
-\    console.log('this.state.count', this.state.count);
+ console.log('this.state.count', this.state.count);
 
-  };
+};
 
 \`\``
 
@@ -237,27 +225,21 @@ Let’s stay, we wanted to add in a maximum count as a prop.
 
 \`\``js
 
-  increment = () => {
+increment = () => {
 
-\    this.setState((state) => {
+ this.setState((state) => {
 
-		const {count} = state	
+	const {count} = state	
 
-\    const { max, step } = this.props;
+ const { max, step } = this.props;
 
-\    if (count >= max) return; // notice here I didn't return anything. This is the same as return {count: this.state.count}. If we return nothing, it will not update the state
+ if (count >= max) return; // notice here I didn't return anything. This is the same as return {count: this.state.count}. If we return nothing, it will not update the state
 
-\    return { count: count + step };
+ return { count: count + step };
 
-\    });
+ });
 
-  };
-
-
-
-// index.js
-
-render(<Counter max=’15’ step=‘5’/>, document.getElementById(‘root’));
+};
 
 \`\``
 
@@ -265,17 +247,17 @@ But there is a catch. Now the function we passed into \`this.setState\` also rep
 
 \`\``js
 
-  increment = () => {
+increment = () => {
 
-\    this.setState(({count}, {max, step})=> {
+ this.setState(({count}, {max, step})=> {
 
-\    if(count >= max) return
+ if(count >= max) return
 
-\    return {count: count + step}
+ return {count: count + step}
 
-\    });
+ });
 
-  };
+};
 
 \`\``
 
@@ -287,25 +269,21 @@ After extracting the function out, we get
 
 const incrementHelper = ({ count }, props) => {
 
-  const { max, step } = props;
+const { max, step } = props;
 
-  if (count >= max) return;
+if (count >= max) return;
 
-  return { count: count + step };
+return { count: count + step };
 
 };
 
-
-
 class Counter extends Component {
 
-  state = getStateFromLocalStorage();
+state = getStateFromLocalStorage();
 
+increment = () => {
 
-
-  increment = () => {
-
-\    this.setState(incrementHelper)}
+ this.setState(incrementHelper)}
 
 \`\``
 
@@ -327,29 +305,29 @@ One use case would be that we can use \`LocalStorage\` to update the cached stat
 
 \`\``js
 
- increment = () => {
+increment = () => {
 
-\    this.setState(
+ this.setState(
 
-\    ({ count }, props) => {
+ ({ count }, props) => {
 
-\    const { max, step } = props;
+ const { max, step } = props;
 
-\    if (count >= max) return;
+ if (count >= max) return;
 
-\    return { count: count + step };
+ return { count: count + step };
 
-\    },
+ },
 
-\    () => {
+ () => {
 
-\    localStorage.setItem('counterState', JSON.stringify(this.state));
+ localStorage.setItem('counterState', JSON.stringify(this.state));
 
-\    },
+ },
 
-\    );
+ );
 
-  };
+};
 
 \`\``
 
@@ -367,8 +345,6 @@ increment() {
 
 However t doesn’t work. it’s a bummer that the callback function does not have a copy of the state. It does not get any arguments. We could wrap it into a function and then pass the state in, or we can put the function onto the class component itself. i.e. it is a method of the class. Either way, we will lose the testability that we have for the first function argument of \`setState\`
 
-
-
 \### useState
 
 Now it’s 2020, let’s use Hooks like everyone else is doing.
@@ -377,59 +353,51 @@ Get ready to delete lots of code.
 
 \`\``js
 
-
-
 const Counter = ({ max, step }) => {
 
-  const \[count, setCount] = useState(0);
+const \[count, setCount] = useState(0);
 
+const increment = () => setCount(count + 1);
 
+const decrement = () => setCount(count - 1);
 
-  const increment = () => setCount(count + 1);
+const reset = () => setCount(0);
 
-  const decrement = () => setCount(count - 1);
+return (
 
-  const reset = () => setCount(0);
+ <main className="Counter">
 
+ <p className="count">{count}</p>
 
+ <section className="controls">
 
-  return (
+ <button onClick={increment}>Increment</button>
 
-\    <main className="Counter">
+ <button onClick={decrement}>Decrement</button>
 
-\    <p className="count">{count}</p>
+ <button onClick={reset}>Reset</button>
 
-\    <section className="controls">
+ </section>
 
-\    <button onClick={increment}>Increment</button>
+ </main>
 
-\    <button onClick={decrement}>Decrement</button>
-
-\    <button onClick={reset}>Reset</button>
-
-\    </section>
-
-\    </main>
-
-  );
+);
 
 };
-
-
 
 \`\``
 
 <iframe
 
-\    src="https://codesandbox.io/embed/counter-hook-based-snv78?fontsize=14&hidenavigation=1&theme=dark"
+ src="https://codesandbox.io/embed/counter-hook-based-snv78?fontsize=14&hidenavigation=1&theme=dark"
 
-\    style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+ style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
 
-\    title="counter-hook-based"
+ title="counter-hook-based"
 
-\    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+ allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
 
-\    sandbox="allow-autoplay allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+ sandbox="allow-autoplay allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 
 \></iframe>
 
@@ -437,17 +405,17 @@ const Counter = ({ max, step }) => {
 
 \`\``js
 
-  const increment = () => {
+const increment = () => {
 
-\    setCount(count + 1);
+ setCount(count + 1);
 
-\    setCount(count + 1);
+ setCount(count + 1);
 
-\    setCount(count + 1);
+ setCount(count + 1);
 
-\    console.log('count', count);
+ console.log('count', count);
 
-  };
+};
 
 \`\``
 
@@ -459,13 +427,13 @@ It also turns out that \`useState\` can take function as its argument too
 
 const increment = () => {
 
-\    setCount((count) => count + 1);
+ setCount((count) => count + 1);
 
-\    setCount((count) => count + 1);
+ setCount((count) => count + 1);
 
-\    setCount((count) => count + 1);
+ setCount((count) => count + 1);
 
-  };
+};
 
 \`\``
 
@@ -479,9 +447,9 @@ There is another important difference here.  Earlier with \`setState\`, we ended
 
 setCount(count => {
 
-  if (count >= max) return;
+if (count >= max) return;
 
-  return count + 1;
+return count + 1;
 
 });
 
@@ -495,17 +463,17 @@ The fix is easy though, we just need to return the state as it is
 
 \`\``js
 
-  const increment = () => {
+const increment = () => {
 
-\    setCount((count) => {
+ setCount((count) => {
 
-\    if (count >= max) return count;
+ if (count >= max) return count;
 
-\    return count + step;
+ return count + step;
 
-\    });
+ });
 
-  };
+};
 
 \`\``
 
@@ -517,47 +485,39 @@ One use case is implement localStorage in \`useEffect\`
 
 \`\``js
 
-  useEffect(() => {
+useEffect(() => {
 
-\    localStorage.setItem(key, JSON.stringify({ value }));
+ localStorage.setItem(key, JSON.stringify({ value }));
 
-  }, \[value]);
+}, \[value]);
 
 \`\``
 
 We can even make our own custom hooks to make it even more usable.
 
-
-
 \`\``js
 
 const useLocalStorage = (initialState, key) => {
 
-  const getInitialValue = () => {
+const getInitialValue = () => {
 
-\    const storage = localStorage.getItem(key);
+ const storage = localStorage.getItem(key);
 
-\    if (storage) return JSON.parse(storage).value;
+ if (storage) return JSON.parse(storage).value;
 
-\    return initialState;
+ return initialState;
 
-  };
+};
 
+const \[value, setValue] = useState(getInitialValue());
 
+useEffect(() => {
 
-  const \[value, setValue] = useState(getInitialValue());
+ localStorage.setItem(key, JSON.stringify({ value }));
 
+}, \[value]);
 
-
-  useEffect(() => {
-
-\    localStorage.setItem(key, JSON.stringify({ value }));
-
-  }, \[value]);
-
-
-
-  return \[value, setValue];
+return \[value, setValue];
 
 }
 
@@ -577,97 +537,81 @@ After taking a look at \`setState\` and \`useState\`. I want to revisit the clas
 
 import React, { Component } from 'react';
 
-
-
 class Counter extends Component {
 
-  state = {
+state = {
 
-\    count: 0,
+ count: 0,
 
-  };
+};
 
+increment = () => {
 
+ this.setState(({ count }) => ({
 
-  increment = () => {
+ count: count + 1,
 
-\    this.setState(({ count }) => ({
+ }));
 
-\    count: count + 1,
+};
 
-\    }));
+decrement = () => {
 
-  };
+ this.setState(({ count }) => ({
 
+ count: count - 1,
 
+ }));
 
-  decrement = () => {
+};
 
-\    this.setState(({ count }) => ({
+componentDidUpdate() {
 
-\    count: count - 1,
+ setTimeout(() => {
 
-\    }));
+ console.log(\`count, ${this.state.count}\`);
 
-  };
-
-
-
-  componentDidUpdate() {
-
-\    setTimeout(() => {
-
-\    console.log(\`count, ${this.state.count}\`);
-
-\    }, 3000);
-
-  }
-
-
-
-  reset = () => {
-
-\    this.setState(() => ({
-
-\    count: 0,
-
-\    }));
-
-  };
-
-
-
-  render() {
-
-\    const { count } = this.state;
-
-
-
-\    return (
-
-\    <div className="Counter">
-
-\    <p className="count">{count}</p>
-
-\    <section className="controls">
-
-\    <button onClick={this.increment}>Increment</button>
-
-\    <button onClick={this.decrement}>Decrement</button>
-
-\    <button onClick={this.reset}>Reset</button>
-
-\    </section>
-
-\    </div>
-
-\    );
-
-  }
+ }, 3000);
 
 }
 
+reset = () => {
 
+ this.setState(() => ({
+
+ count: 0,
+
+ }));
+
+};
+
+render() {
+
+ const { count } = this.state;
+
+ return (
+
+ <div className="Counter">
+
+ <p className="count">{count}</p>
+
+ <section className="controls">
+
+ <button onClick={this.increment}>Increment</button>
+
+ <button onClick={this.decrement}>Decrement</button>
+
+ <button onClick={this.reset}>Reset</button>
+
+ </section>
+
+ </div>
+
+ );
+
+}
+
+}
 
 export default Counter;
 
@@ -678,8 +622,6 @@ The delay in \`componentDidUpdate \` is intended to just create some space betwe
 Why is that we are getting the same, updated state printed out to the console again and again?
 
 ![console.log](/../assets/418cd2df-315e-45c6-80ea-8cc853cdab16.png "console.log")
-
-  
 
 This is because, in the setTimeout function, we are referencing \`this.state.count\`, and React itself updates/mutates \`this\` over time so that we can read the fresh version in the render and lifecycle methods, which let us referencing the same \`this.state.value\` when all of those three second delay has caught up.
 
@@ -693,71 +635,61 @@ Now switch back to Hooks.
 
 const Counter = ({ max, step }) => {
 
-  const \[count, setCount] = useState(0);
+const \[count, setCount] = useState(0);
 
+const increment = () => {
 
+ setCount((c) => {
 
-  const increment = () => {
+ if (c >= max) return c;
 
-\    setCount((c) => {
+ return c + step;
 
-\    if (c >= max) return c;
-
-\    return c + step;
-
-\    });
-
-  };
-
-
-
-  const decrement = () => setCount(count - 1);
-
-  const reset = () => setCount(0);
-
-
-
-  useEffect(() => {
-
-\    setTimeout(() => {
-
-\    console.log(\`count: ${count}\`);
-
-\    }, 3000);
-
-  }, \[count]);
-
-
-
-  return (
-
-\    <div className="Counter">
-
-\    <p className="count">{count}</p>
-
-\    <section className="controls">
-
-\    <button onClick={increment}>Increment</button>
-
-\    <button onClick={decrement}>Decrement</button>
-
-\    <button onClick={reset}>Reset</button>
-
-\    </section>
-
-\    </div>
-
-  );
+ });
 
 };
 
+const decrement = () => setCount(count - 1);
 
+const reset = () => setCount(0);
+
+useEffect(() => {
+
+ setTimeout(() => {
+
+ console.log(\`count: ${count}\`);
+
+ }, 3000);
+
+}, \[count]);
+
+return (
+
+ <div className="Counter">
+
+ <p className="count">{count}</p>
+
+ <section className="controls">
+
+ <button onClick={increment}>Increment</button>
+
+ <button onClick={decrement}>Decrement</button>
+
+ <button onClick={reset}>Reset</button>
+
+ </section>
+
+ </div>
+
+);
+
+};
 
 export default Counter;
 
-
-
 \`\``
+
+
 
 This time we have 
 
