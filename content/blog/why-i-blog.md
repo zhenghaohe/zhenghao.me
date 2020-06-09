@@ -13,8 +13,4 @@ By any metrics, I cannot point to specific concrete benefits I will get from all
 
 So, welcome again to my humble abode on the internet. I am Zhenghao, a front end software engineer working at Amazon. This is my first blog post on here. And it feels good to have my own corner of the internet for the first time.
 
-<figure class='full-bleed'>
-
 ![a random picture](/../assets/img_1443.jpeg "a picture that I took at a RYOJI IKEADA's solo exhibition at Taipei")
-
-</figure>
