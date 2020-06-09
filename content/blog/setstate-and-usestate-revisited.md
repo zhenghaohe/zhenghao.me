@@ -13,7 +13,7 @@ We are going to take a look at a very simple counter. Out of the box, it doesnâ€
 
 
 
-\`\``javascript
+\`\``
 
 class Counter extends Component {
 
