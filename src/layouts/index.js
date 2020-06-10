@@ -69,9 +69,8 @@ export default ({ children, location }) => {
         <h3
           style={{
             fontFamily: `Montserrat, sans-serif`,
-            marginTop: "3rem",
-            marginLeft: "3rem",
-            marginBottom: "-3rem",
+
+            marginBottom: "-1rem",
           }}
         >
           <Link
@@ -93,6 +92,8 @@ export default ({ children, location }) => {
         <Wrapper>
           <header
             css={css`
+            display: block !important;
+            text-align: center;
           ${mixins.link}
           color: ${colors.navy};
           h1 {

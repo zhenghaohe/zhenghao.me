@@ -1,14 +1,16 @@
 import React from "react"
 import { Link, graphql } from "gatsby"
 import { MDXRenderer } from "gatsby-plugin-mdx"
-import styled from "styled-components"
+import { MDXProvider } from "@mdx-js/react"
+
+import styled, { css } from "styled-components"
 import Bio from "../components/bio"
 import SEO from "../components/seo"
 import { rhythm, scale } from "../utils/typography"
 import Tag from "@components/tag"
-import { theme, mixins, media } from "@styles"
+import { theme, media } from "@styles"
 
-const { colors } = theme
+const { colors, fontSizes } = theme
 class BlogPostTemplate extends React.Component {
   render() {
     const post = this.props.data.mdx
@@ -22,7 +24,15 @@ class BlogPostTemplate extends React.Component {
           description={post.frontmatter.description || post.excerpt}
         />
         <TitleContainer>
-          <h1>{post.frontmatter.title}</h1>
+          <h1
+            css={css`
+              ${media.thone`
+    font-size: ${fontSizes.large};
+  `};
+            `}
+          >
+            {post.frontmatter.title}
+          </h1>
           <p
             style={{
               ...scale(-1 / 5),
@@ -37,7 +47,23 @@ class BlogPostTemplate extends React.Component {
           <Tag type={post.frontmatter.tag} location="blog" positon="center" />
         </TitleContainer>
         <Wrapper>
-          <MDXRenderer>{post.body}</MDXRenderer>
+          <MDXProvider
+            components={{
+              p: props => <p {...props} style={{ margin: 0 }} />,
+              inlineCode: props => (
+                <code
+                  style={{
+                    fontSize: "inherit",
+                    background: colors.lightNavy,
+                    padding: "0 0.25rem",
+                  }}
+                  {...props}
+                />
+              ),
+            }}
+          >
+            <MDXRenderer>{post.body}</MDXRenderer>
+          </MDXProvider>
         </Wrapper>
         <hr
           style={{

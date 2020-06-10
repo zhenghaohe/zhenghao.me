@@ -6,6 +6,8 @@ description: Fix for gatsby-plugin-mdx and gatsby-remark-images
 tag: personal
 ---
 
+import { Link } from "gatsby"
+
 ![Great Gatsby](/../assets/great2.jpg "Great Gatsby")
 
 ## Netlify CMS Media Configuration
@@ -38,6 +40,20 @@ If you try this…
   }
 },
 ```
+
+### In practice
+
+In the example below, I've created a demo to better illustrate how `useMemo` works. For our purposes, I have stubbed out some functions in order to make the example work properly; however, pay attention to the comments as they will provide further context.
+
+_Note: If you're unfamiliar with <Link to="/hooks-useeffect">`useEffect`</Link> or <Link to="/hooks-usestate">`useState`</Link>, take a moment and check out the previous articles in this series before continuing. Otherwise, these should look pretty familiar to you._
+
+<iframe
+  src="https://codesandbox.io/embed/hooksusememo-kfgvu?expanddevtools=1&fontsize=14&hidenavigation=1&theme=dark&view=editor"
+  style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+  title="hooks/useMemo"
+  allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+  sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+></iframe>
 
 ```javascript
 const Counter = ({ max, step }) => {
