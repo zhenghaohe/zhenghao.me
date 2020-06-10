@@ -1,8 +1,10 @@
 ---
-path: setState-and-useState-Revisited
+path: revisiting-setState-and-useState
 date: 2020-06-09T22:37:46.911Z
-title: "setState and useState: Revisited"
-description: "There are lots of subtle nuances about them and they can definitely bite you if you are not careful. "
+title: Revisiting setState and useState
+description: >-
+  There are lots of subtle nuances about them and they can definitely bite you
+  if you are not careful. 
 tag: engineering
 ---
 
@@ -413,7 +415,7 @@ Why is that we are getting the same, updated state printed out to the console ag
 
 <div class='tip tip-right'>
 
-Dan Abramov has an amazon post on this exact topic as well [How Are Function Components Different from Classes? — Overreacted](https://overreacted.io/how-are-function-components-different-from-classes/)
+Dan Abramov has an informative post on this exact topic as well [How Are Function Components Different from Classes? — Overreacted](https://overreacted.io/how-are-function-components-different-from-classes/)
 
 </div>
 
