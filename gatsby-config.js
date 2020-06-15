@@ -73,6 +73,10 @@ module.exports = {
           },
           {
             resolve: `gatsby-remark-vscode`,
+            options: {
+              theme: `Nord`,
+              extensions: [`nord-visual-studio-code`],
+            },
           },
           {
             resolve: `gatsby-remark-copy-linked-files`,

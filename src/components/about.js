@@ -45,7 +45,7 @@ export default () => {
               </p>
               <p>
                 I was born and raised in China. I used to live in Chengdu before
-                I moved to Vancouver. I also lived in Taipei for a while.
+                I moved to Vancouver.
               </p>
               <p>
                 Outside of programming, I enjoy taking pictures, drawing and

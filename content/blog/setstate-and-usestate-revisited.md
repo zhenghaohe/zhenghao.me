@@ -10,7 +10,7 @@ If you are writing React, you definitely are no stranger to `setState` and `useS
 
 We are going to take a look at a very simple counter. Out of the box, it doesn’t have a lot going on.
 
-```javascript
+```js{1,3-5}
 class Counter extends Component {
   state = { count: 0 }
   increment = () => {
@@ -52,20 +52,13 @@ First let’s take an uncomfortably close look at the `useState` API. The first 
 
 let’s say we refactored `increment()` as follows:
 
-```javascript
-
-increment() {
-
-this.setState({ count: this.state.count + 1 });
-
-this.setState({ count: this.state.count + 1 });
-
-this.setState({ count: this.state.count + 1 });
-
-console.log(this.state.count);
-
+```js
+increment = () => {
+  this.setState({ count: this.state.count + 1 })
+  this.setState({ count: this.state.count + 1 })
+  this.setState({ count: this.state.count + 1 })
+  console.log(this.state.count)
 }
-
 ```
 
 Take a lucky guess about what the value that gets logged out would be and what value the count would be updated to?

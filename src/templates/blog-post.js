@@ -2,7 +2,7 @@ import React from "react"
 import { Link, graphql } from "gatsby"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import { MDXProvider } from "@mdx-js/react"
-
+import { createGlobalStyle } from "styled-components"
 import styled, { css } from "styled-components"
 import Bio from "../components/bio"
 import SEO from "../components/seo"
@@ -11,6 +11,14 @@ import Tag from "@components/tag"
 import { theme, media } from "@styles"
 
 const { colors, fontSizes } = theme
+const GlobalStyle = createGlobalStyle`
+  :root {
+  --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.1); /* default: transparent */
+  --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
+  --grvsc-line-highlighted-border-width: 2px; /* default: 4px */
+}
+`
+
 class BlogPostTemplate extends React.Component {
   render() {
     const post = this.props.data.mdx
@@ -19,6 +27,7 @@ class BlogPostTemplate extends React.Component {
 
     return (
       <>
+        <GlobalStyle />
         <SEO
           title={post.frontmatter.title}
           description={post.frontmatter.description || post.excerpt}
