@@ -21,7 +21,6 @@ const GlobalStyle = createGlobalStyle`
       body {
         box-sizing: border-box;
         padding: 5rem;
-        ${"" /* font-family: 'Source Code Pro' !important; */}
 
         ${media.tablet`
             padding: 0;

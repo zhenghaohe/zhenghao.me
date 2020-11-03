@@ -20,7 +20,7 @@ const Tag = styled.span`
   font-size: ${props =>
     props.location === "homepage" ? fontSizes.large : fontSizes.small};
   padding: ${props =>
-    props.location === "homepage" ? "1.2rem 1.5rem " : "0.6rem 0.8rem;"};
+    props.location === "homepage" ? "1.2rem 1.5rem " : "1rem 0.8rem;"};
   display: inline-flex;
   background-color: ${props =>
     props.type === "personal" ? colors.red : colors.navy};

@@ -14,9 +14,9 @@ const theme = {
   fontSizes: {
     xsmall: "12px",
     smallish: "13px",
-    small: "0.8rem",
-    medium: "1rem",
-    large: "1.4rem",
+    small: "1rem",
+    medium: "1.2rem",
+    large: "1.5rem",
     xlarge: "1.8rem",
     xxlarge: "2rem",
     xxxlarge: "2.8rem",

@@ -12,6 +12,18 @@ import { theme, media } from "@styles"
 
 const { colors, fontSizes } = theme
 const GlobalStyle = createGlobalStyle`
+@font-face {
+    font-family: 'Source Code Pro';
+    font-style: normal;
+    font-weight: 400;
+    src: url('../fonts/source-code-pro-v13-latin-regular.eot'); /* IE9 Compat Modes */
+    src: local('Source Code Pro Regular'), local('SourceCodePro-Regular'),
+        url('../fonts/source-code-pro-v13-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+        url('../fonts/source-code-pro-v13-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
+        url('../fonts/source-code-pro-v13-latin-regular.woff') format('woff'), /* Modern Browsers */
+        url('../fonts/source-code-pro-v13-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+        url('../fonts/source-code-pro-v13-latin-regular.svg#SourceCodePro') format('svg'); /* Legacy iOS */
+  }
   :root {
   --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.1); /* default: transparent */
   --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
@@ -49,11 +61,10 @@ class BlogPostTemplate extends React.Component {
           </h1>
           <p
             style={{
-              ...scale(-1 / 5),
               display: `block`,
               marginBottom: rhythm(1),
               marginTop: rhythm(-1),
-              marginBottom: rhythm(-0.1),
+              marginBottom: rhythm(-1 / 200),
             }}
           >
             {post.frontmatter.date}

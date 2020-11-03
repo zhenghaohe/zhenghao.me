@@ -29,12 +29,18 @@ export default () => {
               const title = node.frontmatter.title || node.fields.slug
               return (
                 <div key={node.fields.slug}>
-                  <h3 style={{}}>
+                  <h3>
                     <HomePageLink to={`blog${node.fields.slug}`}>
                       {title}
                     </HomePageLink>
                   </h3>
-                  <small>{node.frontmatter.date}</small>
+                  <span
+                    css={css`
+                      margin: 0.3rem 0;
+                    `}
+                  >
+                    {node.frontmatter.date}
+                  </span>
                   <Tag
                     type={node.frontmatter.tag}
                     location="homepage"
