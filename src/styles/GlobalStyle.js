@@ -13,8 +13,6 @@ const GlobalStyle = createGlobalStyle`
 
       html {
         font-size: 62.5%;
-        font-family: "Maven Pro", sans-serif;
-        font-weight: 300;
         ${media.tablet`
             font-size: 55%;
         `}
@@ -23,6 +21,8 @@ const GlobalStyle = createGlobalStyle`
       body {
         box-sizing: border-box;
         padding: 5rem;
+        ${"" /* font-family: 'Source Code Pro' !important; */}
+
         ${media.tablet`
             padding: 0;
         `}

@@ -6,8 +6,16 @@ import Contact from "@components/contact"
 
 import { GlobalStyle } from "@styles"
 
+import { Helmet } from "react-helmet"
+
 export default () => (
   <>
+    <Helmet>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap"
+        rel="stylesheet"
+      />
+    </Helmet>
     <GlobalStyle />
     <Main />
     <About />

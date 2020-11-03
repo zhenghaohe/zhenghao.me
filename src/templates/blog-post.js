@@ -16,7 +16,11 @@ const GlobalStyle = createGlobalStyle`
   --grvsc-line-highlighted-background-color: rgba(255, 255, 255, 0.1); /* default: transparent */
   --grvsc-line-highlighted-border-color: rgba(255, 255, 255, 0.5); /* default: transparent */
   --grvsc-line-highlighted-border-width: 2px; /* default: 4px */
-}
+}  
+  code {
+    font-size: 1rem !important;
+    font-family: 'Source Code Pro' !important;
+  }
 `
 
 class BlogPostTemplate extends React.Component {
@@ -37,6 +41,7 @@ class BlogPostTemplate extends React.Component {
             css={css`
               ${media.thone`
     font-size: ${fontSizes.large};
+
   `};
             `}
           >

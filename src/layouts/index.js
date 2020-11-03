@@ -68,8 +68,6 @@ export default ({ children, location }) => {
       header = (
         <h3
           style={{
-            fontFamily: `Montserrat, sans-serif`,
-
             marginBottom: "-1rem",
           }}
         >
@@ -98,7 +96,7 @@ export default ({ children, location }) => {
           color: ${colors.navy};
           h1 {
             font-size: ${fontSizes.xxlarge} !important;
-
+            font-family: inherit;
           }
 
         `}

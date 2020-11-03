@@ -23,7 +23,6 @@ export default () => {
       >
         <p class="address">vancouver, bc</p>
         <p class="email">zhenghaohe17@gmail.com</p>
-        <p class="phone">778 862 1508</p>
       </div>
     </ContactSection>
   )

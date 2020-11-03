@@ -7,6 +7,12 @@ import { rhythm } from "../utils/typography"
 import Button from "../components/button"
 import { theme } from "@styles"
 import Tag from "@components/tag"
+import { createGlobalStyle } from "styled-components"
+
+const GlobalStyle = createGlobalStyle`
+        background-color: red;
+`
+
 const { colors, fontSizes } = theme
 
 class Blog extends React.Component {
@@ -17,6 +23,7 @@ class Blog extends React.Component {
 
     return (
       <div>
+        <GlobalStyle />
         <SEO title="All posts" />
         <Bio />
         <div
@@ -37,6 +44,7 @@ class Blog extends React.Component {
               small {
                 font-size: ${fontSizes.medium};
               }
+
             `}
         >
           {posts.map(({ node }) => {
