@@ -8,13 +8,13 @@ description: >-
 tag: engineering
 ---
 
-# This post is a growing collection of things that triggered so called “aha” moments throughout my journey of learning React.
+This post is a growing collection of things that triggered so called “aha” moments throughout my journey of learning React.
 
 <div class='tip tip-right'><p>An <a href="https://en.wikipedia.org/wiki/Eureka_effect"> “aha” moment</a> is a moment of sudden insight or clarity; when the subject matter suddenly makes sense. </p></div>
 
 ## 1. Why is that whenever we use React, we need to import two separate packages i.e. "react" and "react-dom"?
 
-To understand the distinction here, first we need to understand that, reconciliation and rendering are two **separate** phases for a React app. Reconciliation is the algorithm behind what is popularly understood as the “virtual DOM.”. In other words, it is the algorithm React uses to diff one tree with another to determine which parts need to be changed. On the other hand, Rendering is the process where React uses that information to actually update the app.
+To understand the distinction here, first we need to understand that, reconciliation (frequently referred to as "the render phase") and commit are two **separate** phases for a React app. Reconciliation is the algorithm behind what is popularly understood as the “virtual DOM.”. In other words, it is the algorithm React uses to diff one tree with another to determine which parts need to be changed. On the other hand, "commit" is the process where React uses that information to actually update the app.
 
 There are more than just one rendering environments - for example, in the case of a browser application, those virtual DOMs end up being translated to a set of DOM operations. The other major rendering environment is native iOS and Android views via React Native. This separation means that React DOM and React Native can use their own renderers while sharing the same reconciler, provided by React core. That also means the reconciler is principally not concerned with the renderer (though renderers might need to change to support and take advantage of the reconciler).
 
@@ -41,9 +41,9 @@ Over the years people have been questioning this default behaviour of React. Dan
 
 A following up question would be that, why is that React only does shallow comparison instead of deep comparison? One simple answer is because shallow comparison is relatively cheap with a time complexity of O(n). However even with linear time complexity, shallow comparison is not free. This is also why in normal rendering, **React does not care whether "props changed"** - it will render child components unconditionally just because the parent rendered. Instead of diffing the input (props), React, by default, diffs the output (virtual DOMs).
 
-## 3. Why is that state updates in React may Be asynchronous
+## 3. Why is that state updates in React may Be asynchronous?
 
-<div class='tip tip-right'><p>It comes from the official docs<a href="https://reactjs.org/docs/state-and-lifecycle.html#state-updates-may-be-asynchronous"> "State Updates May Be Asynchronous"</a></p></div>
+<div class='tip tip-right'><p>It comes from the official docs<a href="https://reactjs.org/docs/state-and-lifecycle.html#state-updates-may-be-asynchronous"> "State Updates May be Asynchronous"</a></p></div>
 
 Anyone who has worked with React professionally would know that state updates in React are async, we should not rely on their values for calculating the next state. But how exactly are they asynchronous? Do they return a promise so you can put `await` in front of it? More importantly, why does React default to asynchronicity when it comes to state updates rather than synchronously updating them?
 
@@ -69,3 +69,53 @@ Lastly, this is an interesting demo you can play with to get a better understand
      allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
      sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
    ></iframe>
+
+## 4. Why is that we need to perform side effects in useEffect / useLayoutEffect Hooks, rather than in the render logic?
+
+It has been stated upfront in the official docs of `useEffect` Hook that it is a place where we can perform side effects. I guess there are many people like me, who have critically thought about the downsides of _not_ putting your side effects in `useEffect` / `useLayoutEffect` Hooks. The conclusion I gathered before was that because a lot of times the side effects we wanted to perform take time. One of the most common side effects we need to deal with is data fetching. You know, we've all written stuff like that, where you fire off a promise in `useEffect` and you keep track of the data, the error, and the status. Actually, I would even go as far as to say you probably should not use `useEffect` just for data fetching, at least not for any serious projects. It is a building block that is too low-level and it should have been encapsulated in some more sophisticated data fetching libraries such as React Query or any other custom hooks. (This is loosely based on <a href='https://overreacted.io/a-complete-guide-to-useeffect/'>a blog post</a> from Dan Abramov when Hooks just got released)
+
+<div class='tip tip-right'>
+<p>
+In the longer term, Suspense will gradually covers most of data fetching use cases to further reduce the needs of using useEffect, according to <a href='https://reactjs.org/blog/2018/11/27/react-16-roadmap.html#react-16x-mid-2019-the-one-with-suspense-for-data-fetching'>this React roadmap</a>  
+</p>
+</div>
+
+Now back to the topic - it should be obvious that asynchronous tasks like data fetching should not block browser painting. Therefore by putting them inside of `useEffect`, we deliver a better user experience. However, this is just part of the picture. There is another important aspect about making sure our render function is side-effect free, that is it prepares us for React's upcoming new feature - Concurrent Mode.
+
+Side effects by nature lead to the non-deterministic output. And it is vital to make the rendering phase deterministic during Concurrent Mode since the way Concurrent Mode works is to break the rendering work into pieces, pausing and resuming the work to avoid blocking the browser. That means, React might end up rendering a component multiple times, but throw away the render output because other updates invalidate the current work being done, either because of an error or a higher priority interruption. You can see how having effect sides in the rendering phase can be problematic during the concurrent mode.
+
+Here's a simple example showing these differences (because the world can never have too many "counter" examples):
+
+```js
+const BadCounter = () => {
+  const countRef = useRef(0)
+  countRef.current += 1
+  return <div>count:{countRef.current}</div>
+}
+```
+
+<div class='tip tip-left'>
+<p>
+ref is essentially a global variable outside the function scope, hence modifying it is a side effect.
+</p>
+</div>
+
+This works as expected in _traditional_ React where the render phase and the commit phase is one-to-one. That is, whenever the parent component re-renders, the counter will increase by 1. However, in Concurrent Mode, if React invokes the render function multiple times without committing, the counter will increase unexpectedly.
+
+```js
+const GoodCounter = () => {
+  const countRef = useRef(0)
+  let currentCount = countRef.current
+  useEffect(() => {
+    countRef.current = currentCount
+  })
+  currentCount += 1
+  return <div>count:{currentCount}</div>
+}
+```
+
+The above version uses `useEffect` to perform the side effect, which only runs once after the commit phase. `currentCount` is a local variable within the render function scope, so it will only change the ref count in the commit phase.
+
+As I pointed out earlier, the subtle bug in `BadCounter` example is not necessarily going to manifest in _traditional_ React where the render phase and the commit phase is one-to-one. _Unless_ we intentionally double-invoke the render function, and that is where React's Strict mode comes in handy - it helps you spot these side effects by double-rendering components inside of a `<StrictMode>` tag in development.
+
+By the way, why does React need Concurrent Mode? Here I would like to really drill home the idea that "rendering" is not the same thing as "updating the DOM", as they are two separate processes in React. The commit phase is usually very fast, but rendering can be slow. It makes sense for React to pause the work in the rendering phase to allow the browser to process events. React will either resume, throw away, or recalculate that work later as appropriate. Also, different types of updates have different priorities — an animation update from user interactions needs to complete more quickly than less important background work such as rendering data fetched from the network. This is actually a running theme in React design - to assign priorities to different types of updates.
