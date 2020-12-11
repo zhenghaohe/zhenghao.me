@@ -60,3 +60,12 @@ In React’s upcoming Concurrent Mode, React will always batch updates, all the 
 Then the question becomes, why does React do that?
 
 We need to realize that React is not a generic data processing library. It is a library for building user interfaces. In terms of the UI, it’s not necessary for every update to be applied immediately; in fact, doing so can be wasteful, causing frames to drop and degrading the user experience.
+
+Lastly, this is an interesting demo you can play with to get a better understanding of React's state updates batching. I did not create this demo. It was created by <a href='https://twitter.com/yagopereiraaz'>Yago</a>.
+
+<iframe src="https://codesandbox.io/embed/react-dom-batched-updates-forked-05uqd?fontsize=14&hidenavigation=1&theme=dark"
+     style="width:100%; height:500px; border:0; border-radius: 4px; overflow:hidden;"
+     title="react-dom-batched-updates (forked)"
+     allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+   ></iframe>
