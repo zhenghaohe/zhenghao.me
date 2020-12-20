@@ -12,13 +12,29 @@ This post is a growing collection of things that triggered so called “aha” m
 
 <div class='tip tip-right'><p>An <a href="https://en.wikipedia.org/wiki/Eureka_effect"> “aha” moment</a> is a moment of sudden insight or clarity; when the subject matter suddenly makes sense. </p></div>
 
-## 1. Why is that whenever we use React, we need to import two separate packages i.e. "react" and "react-dom"?
+## 1. Why do we need virtual DOM?
+
+I wanted to start this blog post with one of my recent realizations - why do we need virtual DOM in React exactly? I do not want to reiterate that superficial kind of claim that you read about online all the time, which is that many people believe frameworks(or libraries) like React or Vue utilize virtual DOMs because they are fast. I think people are missing the point here. The goal or the result of using Virtual DOMs is not to make updating DOM objects faster than rendering directly to the DOM. It is to prevent potential unnecessary re-renders.
+
+First of all, what is Virtual DOM? Here is a snippet I found somewhere online that I think is doing a good job of explaining it.
+<br />
+
+> A virtual DOM is an in-memory object maintained as a copy of the DOM tree. For Virtual DOM-based frameworks (like React or Vue), we render our UI changes to the virtual DOM (and not directly to the DOM). The framework then syncs the virtual DOM with the real DOM. The real DOM changes are then picked by the browser for repainting.
+> <br />
+
+A huge part of the performance problems we face with the web today come from browser repaints. It takes a lot of work for the browser to complete multiple repaint cycles caused by updates in the DOM tree. And that is what directly causes unresponsive pages and janky experiences. Instead of updating whatever needs to be updated to the DOM tree, React makes use of Virtual DOM and applies a process known as `diffing` or `reconciliation`, which basically means it compares the new Virtual DOM with the previous snapshot and then figures out what changes are necessary and apply them to the real DOM. Only by adding this extra layer of a separate "copy" of the real DOM tree, React can control when and what changes are passed on to the DOM for rendering then it can have a chance to optimize for minimizing repaints.
+
+And here we came to a natural conclusion: Virtual DOM is not a feature. It's a means to an end, the end being able to allow developers to write declarative, state-driven UI development without worrying too much about cherry-picking state transitions to optimize performance.
+
+One interesting thing to think about is that DOM objects should literally just be JavaScript Objects. The fact that they are separate things is mostly because of some historical reasons. There is no reason why creating a DOM object should be any more expensive than creating a JavaScript object. Having duplicate JavaScript objects to represent the DOMs and also DOM objects in memory cannot be a good thing. That is why I think Svelt looks pretty promising. Unlike React or Vue, Svelte is a compiler that knows at build time how things could change in your app, rather than waiting to do the work at run time, so there is no for Virtual DOMs and diffing at all.
+
+## 2. Why is that whenever we use React, we need to import two separate packages i.e. "react" and "react-dom"?
 
 To understand the distinction here, first we need to understand that, reconciliation (frequently referred to as "the render phase") and commit are two **separate** phases for a React app. Reconciliation is the algorithm behind what is popularly understood as the “virtual DOM.”. In other words, it is the algorithm React uses to diff one tree with another to determine which parts need to be changed. On the other hand, "commit" is the process where React uses that information to actually update the app.
 
 There are more than just one rendering environments - for example, in the case of a browser application, those virtual DOMs end up being translated to a set of DOM operations. The other major rendering environment is native iOS and Android views via React Native. This separation means that React DOM and React Native can use their own renderers while sharing the same reconciler, provided by React core. That also means the reconciler is principally not concerned with the renderer (though renderers might need to change to support and take advantage of the reconciler).
 
-## 2. Why is that immutability is so important when it comes to state updates in React app?
+## 3. Why is that immutability is so important when it comes to state updates in React app?
 
 <div class='tip tip-left'><p>
 Actually instead of using "===", React uses "Object.is". But they are really just the same except for two cases: "NaN" and "0" vs. "-0"</p></div>
@@ -41,7 +57,7 @@ Over the years people have been questioning this default behaviour of React. Dan
 
 A following up question would be that, why is that React only does shallow comparison instead of deep comparison? One simple answer is because shallow comparison is relatively cheap with a time complexity of O(n). However even with linear time complexity, shallow comparison is not free. This is also why in normal rendering, **React does not care whether "props changed"** - it will render child components unconditionally just because the parent rendered. Instead of diffing the input (props), React, by default, diffs the output (virtual DOMs).
 
-## 3. Why is that state updates in React may Be asynchronous?
+## 4. Why is that state updates in React may Be asynchronous?
 
 <div class='tip tip-right'><p>It comes from the official docs<a href="https://reactjs.org/docs/state-and-lifecycle.html#state-updates-may-be-asynchronous"> "State Updates May be Asynchronous"</a></p></div>
 
@@ -70,7 +86,7 @@ Lastly, this is an interesting demo you can play with to get a better understand
      sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
    ></iframe>
 
-## 4. Why is that we need to perform side effects in useEffect / useLayoutEffect Hooks, rather than in the render logic?
+## 5. Why is that we need to perform side effects in useEffect / useLayoutEffect Hooks, rather than in the render logic?
 
 It has been stated upfront in the official docs of `useEffect` Hook that it is a place where we can perform side effects. I guess there are many people like me, who have critically thought about the downsides of _not_ putting your side effects in `useEffect` / `useLayoutEffect` Hooks. The conclusion I gathered before was that because a lot of times the side effects we wanted to perform take time. One of the most common side effects we need to deal with is data fetching. You know, we've all written stuff like that, where you fire off a promise in `useEffect` and you keep track of the data, the error, and the status. Actually, I would even go as far as to say you probably should not use `useEffect` just for data fetching, at least not for any serious projects. It is a building block that is too low-level and it should have been encapsulated in some more sophisticated data fetching libraries such as React Query or any other custom hooks. (This is loosely based on <a href='https://overreacted.io/a-complete-guide-to-useeffect/'>a blog post</a> from Dan Abramov when Hooks just got released)
 

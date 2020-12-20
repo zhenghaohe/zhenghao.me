@@ -2,9 +2,7 @@
 path: generator-search
 date: 2020-12-20T03:10:29.859Z
 title: Make a polling search component using generator functions
-description: >-
-  Implement a polling search component using Generator functions, which talks to
-  a back end that reacts to a specific search query
+description: A polling search component using Generator functions seems to be a legit use case for generator functions.
 tag: engineering
 ---
 
