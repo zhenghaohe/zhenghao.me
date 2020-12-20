@@ -2,15 +2,15 @@
 path: generator-search
 date: 2020-12-20T03:10:29.859Z
 title: Make a polling search component using generator functions
-description: A polling search component using Generator functions seems to be a legit use case for generator functions.
+description: A polling search component seems to be a legit use case for generator functions.
 tag: engineering
 ---
 
 Generator is probably the most underused JavaScript feature. Despite its unpopularity, it has been around since ES6 and until this day it has over 96% browser support.
 
-<div class='tip tip-right'><p>I learned about the number from <a href="https://www.youtube.com/watch?v=cLxNdLK--yI"> this video </a> </p></div>
+<div class='tip tip-right'><p>I learned about the number "96%" from <a href="https://www.youtube.com/watch?v=cLxNdLK--yI"> this video </a> </p></div>
 
-People do not use generators often partly because the legit use cases for generators are indeed rare. If you are not a library author you probably wouldn't need to use generators for normal business requirements. But it might also be because generators are hard to understand. For one thing, they are your average functions that follow something called run-to-completion modal, which basically means that the function cannot be stopped before it finishes the last line, and the only way to exit is by returning from it or throwing an error. And if you call that function again, it will begin the execution from the top again.
+People do not use generator functions often partly because the legit use cases for generators are indeed rare. If you are not a library author you probably wouldn't need to use generators for normal business requirements. But it might also be because generators are hard to understand. For one thing, they are your average functions that follow something called run-to-completion modal, which basically means that the function cannot be stopped before it finishes the last line, and the only way to exit is by returning from it or throwing an error. And if you call that function again, it will begin the execution from the top again.
 
 In contrast, a generator is a function that can stop midway and then continue from where it stopped. Inside of a generator function, we can use the keyword `yield` to pass results to the outside, as well as entering values for the next iteration. It acts as a doorway so that we can control the output midway through. This feature makes generator functions a great candidate for doing tasks such as producing a sequence of results or being an observer that keeps observing for values and acts when it gets one.
 

@@ -24,7 +24,19 @@ First of all, what is Virtual DOM? Here is a snippet I found somewhere online th
 
 A huge part of the performance problems we face with the web today come from browser repaints. It takes a lot of work for the browser to complete multiple repaint cycles caused by updates in the DOM tree. And that is what directly causes unresponsive pages and janky experiences. Instead of updating whatever needs to be updated to the DOM tree, React makes use of Virtual DOM and applies a process known as `diffing` or `reconciliation`, which basically means it compares the new Virtual DOM with the previous snapshot and then figures out what changes are necessary and apply them to the real DOM. Only by adding this extra layer of a separate "copy" of the real DOM tree, React can control when and what changes are passed on to the DOM for rendering then it can have a chance to optimize for minimizing repaints.
 
-And here we came to a natural conclusion: Virtual DOM is not a feature. It's a means to an end, the end being able to allow developers to write declarative, state-driven UI development without worrying too much about cherry-picking state transitions to optimize performance.
+<div class='tip tip-left'>
+<p>
+One of the original slaes pitches for React back to 2013 was <a href="https://www.slideshare.net/floydophone/react-preso-v2">  "act like we're redrawing the entire app on every update".</a>
+</p>
+</div>
+
+<div class='tip tip-right'>
+<p>
+A while back, the React team introduced something called Fiber which allows the update to be broken into smaller chunks. This means that updates don't block the main thread for long periods of time, though it doesn't reduce the total amount of work or the time an update takes.
+</p>
+</div>
+
+And here we came to a natural conclusion: Virtual DOM is not a feature. It's a means to an end, the end being able to allow developers to write declarative, state-driven UI development. One of the main benefits of writing React is that developers can code as if they were "redrawing" the entire app on every update without the need to do the manual work of cherry-picking state transitions for optimizing performance. But this does add overhead because you can't apply changes to the real DOM without first comparing the new virtual DOM with the previous snapshot.
 
 One interesting thing to think about is that DOM objects should literally just be JavaScript Objects. The fact that they are separate things is mostly because of some historical reasons. There is no reason why creating a DOM object should be any more expensive than creating a JavaScript object. Having duplicate JavaScript objects to represent the DOMs and also DOM objects in memory cannot be a good thing. That is why I think Svelt looks pretty promising. Unlike React or Vue, Svelte is a compiler that knows at build time how things could change in your app, rather than waiting to do the work at run time, so there is no for Virtual DOMs and diffing at all.
 
