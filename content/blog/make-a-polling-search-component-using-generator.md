@@ -20,6 +20,8 @@ Imagine we want to implement a polling search component, which talks to a back e
 
 To me, this sounds like a good use case for generators: we are constantly polling the back end for more, but only end the function if the back end tells us it's done.
 
+<div class='tip tip-right'><p>Here I am using cursor-based pagination as the example, as opposed to offset based pagination. You can check out this <a href="https://slack.engineering/evolving-api-pagination-at-slack/#:~:text=Cursor%2Dbased%20pagination%20works%20by,specific%20item%20in%20the%20dataset.&text=This%20method%20addresses%20the%20drawbacks,columns)%20in%20the%20source%20table."> blog post to learn their differences</a> </p></div>
+
 Let's first define the contracts between the client and the server by explicitly defining the type for what we would get back as the response of the querying.
 
 ```ts
