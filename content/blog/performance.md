@@ -16,6 +16,11 @@ First thing first: make sure you are measuring the performance in production mod
 </p>
 </div>
 
+## 0. two metrics
+
+1. The First Contentful Paint (FCP) metric measures the time from when the page starts loading to when any part of the page's content is rendered on the screen, i.e. how fast your site can paint pixels to the screen.
+2. The First Input Delay (FID) metric measures the time from when a user first interacts with a page (i.e. when they click a link, tap on a button, or use a custom, JavaScript-powered control) to the time when the browser is actually able to begin processing event handlers in response to that interaction.
+
 ## 1. the loading performance
 
 When one talks about “loading speed”, one typically means networking performance. This is a list of low hanging fruits that you should be thinking about:
@@ -27,7 +32,8 @@ When one talks about “loading speed”, one typically means networking perform
    - CDNs are set up to be geographically near the people that are requesting them.
    - Another benefit of using CDNs is that there is no longer a single point of failure. Theses servers also function as an interface between the main server and the end-users.
    - You can use CDNs to cache your static assets. The first visitor visits your page. Their browser sends out a request to the CDN, and if the CDN doesn’t have the cache yet. The request goes to your origin server. And origin server send back the assets to CDN, and CDN cache it and pass it to the user.
-     - You can use `s-maxage` in the `cache-control` headers to periodically purge the cache in the CDN so after that they can get the fresh data.
+   - You can use `s-maxage` in the `cache-control` headers to periodically purge the cache in the CDN so after that they can get the fresh data.
+   - You can even use a `cache-control: immutable` header to make the browser always consider the cache as valid and not send out a verification request to the server (<a href='https://engineering.fb.com/2017/01/26/web/this-browser-tweak-saved-60-of-requests-to-facebook/'>Facebook does this</a>). Use versioning to force the browser to re-download the cached file if it changes. - Probably a good idea to tweak `cache-control` per file type.
 
 3. Bundle JavaScript files and minifies them. Most of web apps today use Webpack, minification is one optimization that Webpack performs out of the box for production mode
    - this can reduce the file size and reduce number of times we need to make HTTP requests.
@@ -47,12 +53,14 @@ When one talks about “loading speed”, one typically means networking perform
 Most browser use Just-in-time compilation, that means your app compiles on the clients’ machine. Especially for single page apps, You are sending your user the entire application for them to compile and build.
 
 1. code-splitting unused functionality, you not only reduce bundle init time, but also decrease the compilation time. The less JS code there is, the faster it compiles.
-2. You can cache JS files in the HTTP cache to take advantage of bytecode caching. Most modern browsers do this, the browser would have the bytecode cached so it doesn't pay the cost for compiling it.
-3. You should use defer or async script attributes so that browser know that scripts can be downloaded in the background, without interrupting the document parsing. This can reduce the page loading time.
-4. Find ways to minimize the number of reflows and repaints the browser has to do when running your app.
+2. Break up your synchronous JavaScript code into separate tasks that can run asynchronously as part of a task queue using requestIdleCallback, because JavaScript is single-threaded and when the browser is busy parsing and executing JavaScript code, it cannot run any event listeners at the same time.
+3. You can cache JS files in the HTTP cache to take advantage of bytecode caching. Most modern browsers do this, the browser would have the bytecode cached so it doesn't pay the cost for compiling it.
+4. You should use defer or async script attributes so that browser know that scripts can be downloaded in the background, without interrupting the document parsing. This can reduce the page loading time.
+5. Find ways to minimize the number of reflows and repaints the browser has to do when running your app.
    - When changing classes for stylings, try to change them at the lowest levels of the DOM tree.
    - batch DOM manipulations - If you are using frameworks, you are effectively getting for free. For example, In React most of your state updates are batched automatically (except for asynchronous updates, that are running much later in a totally separate event loop call stack). It would write changes to Virtual DOM and does a diffing between the old and new Virtual DOM and make sure the only minimum required changes are done in the real DOM.
-5. Debounce various events
+6. Review the number of event handlers you have on your site from time to time. Make sure you are using event capturing/bubbling to save memory (with React you are effectively getting for free). Also clean up the event handlers when an element is removed from the DOM to prevent memory leaks.
+7. Debounce various events
    - window resize events
    - user typing events
    - any other slow synchronous operation such as reading/writing to `localStorage`
@@ -63,4 +71,6 @@ Most browser use Just-in-time compilation, that means your app compiles on the c
 2. Preload things that you think will also be needed in a short time. For example, Google starts preloading the first link in search results as soon as you do a search
 3. Deduplicate network requests you make
 4. don't put too much stuff in your `localStorage`. <a href='https://www.janbambas.cz/new-faster-localstorage-in-firefox-21/'>Firefox does this</a>: they read the entire store into memory on page navigation, meaning that the more you stuff in LocalStorage, the more you impact page load time as well as memory costs.
-   - `localStorage` is a synchronous API, you may wish to throttle or debounce the updates to localStorage. Because. it can cause performance problems if it’s read/updated too rapidly.
+   - `localStorage` is a synchronous API, you may wish to throttle or debounce the updates to localStorage. Because. it can cause performance problems if read/updated too rapidly.
+     - There is one edge case to think about when debouncing writing to `localStorage`, that is if the user navigate away from the page before the debounced writing fires, the write would likely fail.
+5. Offload computationally intensive tasks to Service workers or Web workers.
