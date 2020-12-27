@@ -33,7 +33,7 @@ A huge part of the performance problems we face with the web today come from bro
 
 <div class='tip tip-right'>
 <p>
-A while back, the React team introduced something called Fiber which allows the update to be broken into smaller chunks. This means that updates don't block the main thread for long periods of time, though it doesn't reduce the total amount of work or the time an update takes.
+A while back, the React team introduced something called Fiber which allows the update to be broken into smaller chunks and assign different priorities to them. This means that updates don't block the main thread for long periods of time, though it doesn't reduce the total amount of work or the time an update takes.
 </p>
 </div>
 

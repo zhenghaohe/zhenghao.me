@@ -53,12 +53,20 @@ When one talks about “loading speed”, one typically means networking perform
 Most browser use Just-in-time compilation, that means your app compiles on the clients’ machine. Especially for single page apps, You are sending your user the entire application for them to compile and build.
 
 1. code-splitting unused functionality, you not only reduce bundle init time, but also decrease the compilation time. The less JS code there is, the faster it compiles.
-2. Break up your synchronous JavaScript code into separate tasks that can run asynchronously as part of a task queue using requestIdleCallback, because JavaScript is single-threaded and when the browser is busy parsing and executing JavaScript code, it cannot run any event listeners at the same time.
+
+<div class='tip tip-left'>
+<p>
+Seems like <a href='https://github.com/facebook/react/blob/43a137d9c13064b530d95ba51138ec1607de2c99/packages/react-scheduler/src/ReactScheduler.js'>the React team</a> is doing more interesting thing with postMessage to defer idle work until after the repaint
+</p>
+</div>
+
+2. Break up your synchronous JavaScript code into separate tasks that can run asynchronously as part of a task queue using <a href='https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback'>`requestIdleCallback`</a>, because JavaScript is single-threaded and when the browser is busy parsing and executing JavaScript code, it cannot run any event listeners at the same time.
 3. You can cache JS files in the HTTP cache to take advantage of bytecode caching. Most modern browsers do this, the browser would have the bytecode cached so it doesn't pay the cost for compiling it.
 4. You should use defer or async script attributes so that browser know that scripts can be downloaded in the background, without interrupting the document parsing. This can reduce the page loading time.
 5. Find ways to minimize the number of reflows and repaints the browser has to do when running your app.
    - When changing classes for stylings, try to change them at the lowest levels of the DOM tree.
-   - batch DOM manipulations - If you are using frameworks, you are effectively getting for free. For example, In React most of your state updates are batched automatically (except for asynchronous updates, that are running much later in a totally separate event loop call stack). It would write changes to Virtual DOM and does a diffing between the old and new Virtual DOM and make sure the only minimum required changes are done in the real DOM.
+   - Batch DOM manipulations - If you are using frameworks, you are effectively getting for free. For example, In React most of your state updates are batched automatically (except for asynchronous updates, that are running much later in a totally separate event loop call stack). It would write changes to Virtual DOM and does a diffing between the old and new Virtual DOM and make sure the only minimum required changes are done in the real DOM.
+   - Split CPU-hungry tasks into multiple macrotasks(not microtasks which would still block rendering) using zero delayed `setTimeout`. Here is a great <a href='https://javascript.info/event-loop'>tutorial</a> on that you can check out.
 6. Review the number of event handlers you have on your site from time to time. Make sure you are using event capturing/bubbling to save memory (with React you are effectively getting for free). Also clean up the event handlers when an element is removed from the DOM to prevent memory leaks.
 7. Debounce various events
    - window resize events
