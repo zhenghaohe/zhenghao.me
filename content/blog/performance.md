@@ -8,18 +8,24 @@ description: >-
 tag: engineering
 ---
 
-This is not a completely exhaustive reference to everything you can do to improve your website's performance, nor is it a “how to build a fast website” guide. Performance optimization is such a broad topic and I had these noted down as rough notes on my laptop and decided to convert them into a blog post to bring more clarify to the notes (and my understanding).
-
 <div class='tip tip-left'>
 <p>
 First thing first: make sure you are measuring the performance in production mode.
 </p>
 </div>
 
+This is not a completely exhaustive reference to everything you can do to improve your website's performance, nor is it a “how to build a fast website” guide. Performance optimization is such a broad topic and I had these noted down as rough notes on my laptop and decided to convert them into a blog post to bring more clarify to the notes (and my understanding).
+
 ## 0. two metrics
 
 1. The First Contentful Paint (FCP) metric measures the time from when the page starts loading to when any part of the page's content is rendered on the screen, i.e. how fast your site can paint pixels to the screen.
 2. The First Input Delay (FID) metric measures the time from when a user first interacts with a page (i.e. when they click a link, tap on a button, or use a custom, JavaScript-powered control) to the time when the browser is actually able to begin processing event handlers in response to that interaction.
+
+<div class='tip tip-right'>
+<p>
+Check out <a href='https://web.dev/vitals/'>Web Vitals</a> to learn about these user-centric metrics 
+</p>
+</div>
 
 ## 1. the loading performance
 
@@ -46,8 +52,17 @@ When one talks about “loading speed”, one typically means networking perform
      - Your users might end up making more network requests but it shouldn't be a problem with HTTP2.
      - Code splitting requires changes to your application code. It introduces asynchronous logic where previously there was only synchronous logic. It’s not rocket science, but it does add complexity that I think should be justified by a perceivable improvement to the user experience.
 5. Use webpack bundle analyzer to review your bundles. you should look for things like 1. large dependencies 2. duplicated dependencies or multiple versions of the same library
+
+<div class='tip tip-left'>
+<p>
+The amount of factors that need to be taken into consideration when deciding on whether to use Client-side rendering or SSR is not trivial. 
+</p>
+</div>
+
 6. For client side rendered applications, they do not have all of the user specific data from the beginning so they have to request everything to fill in the blanks. And those requests don’t start happening until the bundle is fully downloaded. You can use server side rendering to inline page data into the HTML, where you calculate the API data on the server side – and include it directly into the HTML response. That leads to reducing the initial page load time. But we still have to wait for the JS files to reach the user before anything can be interactive (hydration).
-7. A more radical idea: if we are dealing with a homepage, we might only use React on the server to do server side rendering and use only ship vanilla JavaScript down to the clients. <a href="https://twitter.com/netflixuie/status/923374215041912833?lang=en">Netflix has done this to their landing page</a> and it resulted in a 50% performance improvement
+   - If you content is highly cacheable, you can take advantage of pre-rendered HTML e.g. Gatsby
+
+7) A more radical idea: if we are dealing with a homepage, we might only use React on the server to do server side rendering and use only ship vanilla JavaScript down to the clients. <a href="https://twitter.com/netflixuie/status/923374215041912833?lang=en">Netflix has done this to their landing page</a> and it resulted in a 50% performance improvement
 
 ## 2. the rendering performance
 
