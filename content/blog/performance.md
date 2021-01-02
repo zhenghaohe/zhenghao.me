@@ -72,13 +72,31 @@ Most browser use Just-in-time compilation, that means your app compiles on the c
 
 <div class='tip tip-left'>
 <p>
-Seems like <a href='https://github.com/facebook/react/blob/43a137d9c13064b530d95ba51138ec1607de2c99/packages/react-scheduler/src/ReactScheduler.js'>the React team</a> is doing more interesting thing with postMessage to defer idle work until after the repaint
+<a href='https://github.com/facebook/react/blob/43a137d9c13064b530d95ba51138ec1607de2c99/packages/react-scheduler/src/ReactScheduler.js'>The React team</a> is also using postMessage to defer idle work until after the repaint
 </p>
 </div>
 
-2. Break up your synchronous JavaScript code into separate tasks that can run asynchronously as part of a task queue using <a href='https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback'>`requestIdleCallback`</a>, because JavaScript is single-threaded and when the browser is busy parsing and executing JavaScript code, it cannot run any event listeners at the same time.
+<div class='tip tip-right'>
+<p>
+Note that a Promise does not queue a task, as it does not exit the current event loop iteration. The scheduling algorithms for Promise is inherently susceptible to starvation, which creates a form of denial of service or deadlock. It is possible for <a href='https://html.spec.whatwg.org/multipage/webappapis.html#perform-a-microtask-checkpoint'>the microtask queue</a> to block your browser just like a infinite while loop.  	 
+</p>
+</div>
+
+2. Break up your synchronous JavaScript code into separate tasks that can run asynchronously as part of <a href='https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task'>a (macro)task queue</a>. Since JavaScript is single-threaded and when the browser is busy parsing and executing JavaScript code, it cannot run any event listeners at the same time. Here are a couple ways to do queue a task.
+   - `window.setTimeout` and `window.setInterval`. However <a href='https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout#Timeouts_throttled_to_%E2%89%A5_4ms'>browsers throttle timers to ≥ 4ms.</a>
+   - the Non-standard `Window.setImmediate()`
+   - a lesser-known technique: `MessagePort.postMessage`: Currently the only API that does <a href='https://github.com/YuzuJS/setImmediate#postmessage'>queue a task synchronously</a>
+   - There are two more methods to schedule tasks - `requestIdleCallback` and `requestAnimationFrame`. They do not belong to either the macrotask or the microtask. I might write another blog post to talk about these different broswer scheduling APIs.
 3. code-splitting unused functionality, you not only reduce bundle init time, but also decrease the compilation time. The less JS code there is, the faster it compiles.
-4. You should use defer or async script attributes so that browser know that scripts can be downloaded in the background, without interrupting the document parsing. This can reduce the page loading time.
+
+4) You should use `defer` or `async` script attributes so that browser know that scripts can be downloaded in the background, without interrupting the document parsing. This can reduce the page loading time.
+
+<div class='tip tip-right'>
+<p>
+But probably should just use the defer attribute and put the script tags in the head tag <a href='https://flaviocopes.com/javascript-async-defer/#blocking-parsing'> according to this blog post</a>
+</p>
+</div>
+
 5. Find ways to minimize the number of reflows and repaints the browser has to do when running your app.
 
    - When changing classes for stylings, try to change them at the lowest levels of the DOM tree.
@@ -103,7 +121,17 @@ Seems like <a href='https://github.com/facebook/react/blob/43a137d9c13064b530d95
 1. Choose an appropriate format for images and compress them. - You can use `<picture>` tag for `webp` with a `jpg` fallback. Because `webp` is not supported by Safari.
 2. Preload things that you think will also be needed in a short time.
 3. Deduplicate network requests you make. - <a href='https://react-query.tanstack.com/'>React Query</a> makes this really easy.
-4. don't put too much stuff in your `localStorage`. <a href='https://www.janbambas.cz/new-faster-localstorage-in-firefox-21/'>Firefox does this</a>: they read the entire store into memory on page navigation, meaning that the more you stuff in LocalStorage, the more you impact page load time as well as memory costs.
+
+<div class='tip tip-left'>
+<p>
+   "synchronous", in practice, means blocking. Check out <a href='https://twitter.com/acdlite/status/1344398786894966784'>this tweet</a> for more nuances about this word "synchronous"
+</p>
+</div>
+
+4. Don't put too much stuff in your `localStorage`. <a href='https://www.janbambas.cz/new-faster-localstorage-in-firefox-21/'>Firefox does this</a>: they read the entire store into memory on page navigation, meaning that the more you stuff in LocalStorage, the more you impact page load time as well as memory costs.
    - `localStorage` is a synchronous API, you may wish to throttle or debounce the updates to localStorage. Because. it can cause performance problems if read/updated too rapidly.
      - There is one edge case to think about when debouncing writing to `localStorage`, that is if the user navigate away from the page before the debounced writing fires, the write would likely fail.
-5. Offload computationally intensive tasks to Service workers or Web workers.
+
+5) Offload computationally intensive tasks to Service workers or Web workers.
+   - It comes with <a href='https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers#Transferring_data_to_and_from_workers_further_details'>the cost of serialization</a>
+6) You can mess around `window.navigator` to get to know the amount of memory the user's device has or <a href='https://twitter.com/umaar/status/897753290510913536'>their bandwidth</a> so you can decide whether to download some resources at all.
