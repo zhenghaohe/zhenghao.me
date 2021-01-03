@@ -6,6 +6,8 @@ description: A polling search component seems to be a legit use case for generat
 tag: engineering
 ---
 
+## Intro
+
 Generator is probably the most underused JavaScript feature. Despite its unpopularity, it has been around since ES6 and until this day it has over 96% browser support.
 
 <div class='tip tip-right'><p>I learned about the number "96%" from <a href="https://www.youtube.com/watch?v=cLxNdLK--yI"> this video </a> </p></div>
@@ -15,6 +17,8 @@ People do not use generator functions often partly because the legit use cases f
 In contrast, a generator is a function that can stop midway and then continue from where it stopped. Inside of a generator function, we can use the keyword `yield` to pass results to the outside, as well as entering values for the next iteration. It acts as a doorway so that we can control the output midway through. This feature makes generator functions a great candidate for doing tasks such as producing a sequence of results or being an observer that keeps observing for values and acts when it gets one.
 
 <div class='tip tip-right'><p>You can read more about Generator functions <a href="https://exploringjs.com/es6/ch_generators.html#sec_generators-as-observers"> here</a> </p></div>
+
+## Generators for Infinite Data Streams
 
 Imagine we want to implement a polling search component, which talks to a back end that reacts to a specific search query and then returns results that match with the query as the response. The number of results can potentially be huge. Therefore we might not get an exhaustive list of results back immediately. Instead, we would get a batch of results back along with a token that indicates the next batch to fetch. We are fetching results in batches because we want to show them to the user as soon as possible so that they have something to work with immediately.
 
@@ -104,3 +108,69 @@ Here is the demo you can play with. Excuse the absence of stylings, I suck at th
      allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
      sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
    ></iframe>
+
+## Bonus
+
+I have been grinding Leetcode these days to prepare myself for the upcoming interviews. <a href='https://leetcode.com/problems/flatten-nested-list-iterator/'>Here is one question</a> that lends itself pretty well to Generators.
+
+The question asks you to implement an iterator to flatten a potentially nested array of integers. The iterator needs to have two methods: 1. `next` to return the next integer in the flattened array; 2. `hasNext` to return a `boolean` that indicates whether or not we are at the end of teh array.
+
+Here is my attempt using Generators. (I did a few modifications just to make the example run locally)
+
+```js
+function isInteger(num) {
+  return typeof num === "number" && Number.isInteger(num)
+}
+class NestedIterator {
+  constructor(nestedList) {
+    this.gen = this.listGenerator(nestedList)
+    this.nextVal = this.gen.next()
+  }
+
+  hasNext() {
+    return !this.nextVal.done
+  }
+
+  next() {
+    const val = this.nextVal.value
+    this.nextVal = this.gen.next()
+    return val
+  }
+
+  *listGenerator(list) {
+    for (const el of list) {
+      if (isInteger(el)) yield el
+      else yield* this.listGenerator(el)
+    }
+  }
+}
+
+const iterator = new NestedIterator([1, [2, 3], 4, [5, [6]]])
+
+while (iterator.hasNext()) {
+  console.log(iterator.next()) // 1, 2, 3, 4, 5, 6
+}
+```
+
+The alternative is to use a plain array to hold the flattened array:
+
+```js
+class NestedIterator {
+  constructor(nestedList) {
+    this.arr = []
+    flatten(this.arr, nestedList)
+  }
+
+  hasNext() {
+    return this.arr.length > 0
+  }
+  next() {
+    return this.arr.shift()
+  }
+}
+```
+
+In my opinion, the first approach with Generators is better than second approach. For one thing, Generators give us the ability to performe lazy evaluation. As a result, it is more memory efficient. We generate only the values that are needed. With normal functions, we needed to pre-generate all the values, in this case pre-flattening the whole array and keep them around in case we use them later. However, with Generators, we can defer the computation till we need it.
+
+<div class='tip tip-right'><p>Lazy evaluation is an evaluation model which delays the evaluation of an expression until its value is needed. That is, if we don’t need the value, it won’t exist. It is calculated as we demand it.
+</p></div>
