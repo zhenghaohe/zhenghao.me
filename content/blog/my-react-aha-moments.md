@@ -37,7 +37,13 @@ A while back, the React team introduced something called Fiber which allows the 
 </p>
 </div>
 
-And here we came to a natural conclusion: Virtual DOM is not a feature. It's a means to an end, the end being able to allow developers to do declarative, state-driven UI development. But this does add overhead because, as I have mentioned many times, you can't apply changes to the real DOM without first comparing the new virtual DOM with the previous snapshot.
+<div class='tip tip-left'>
+<p>
+What React brought to the table is a paradigm shift. Here is <a href="https://twitter.com/wycats/status/1347192763306033155">an interesting tweet</a> on that topic.
+</p>
+</div>
+
+And here we came to a natural conclusion: Virtual DOM is not a feature. It's a means to an end, the end being able to allow developers to do declarative, state-driven UI development. With this model in place, the programmer is thus relieved from the burden of specifying the transition between states (or transformation) of the UI over time. No need to specify how to go from A to B: just describe what A looks like and what B looks like, in a discrete way. But this does add overhead because, as I have mentioned many times, you can't apply changes to the real DOM without first comparing the new virtual DOM with the previous snapshot.
 
 One interesting thing to think about is that DOM objects should literally just be JavaScript Objects. The fact that they are separate things (DOM objects are actually C++ according to <a href='https://v8.dev/blog/tracing-js-dom'>this blog post</a>) is mostly because of some historical reasons. There is no reason why creating a DOM object should be any more expensive than creating a JavaScript object. Having duplicate JavaScript objects to represent the DOMs and also DOM objects in memory cannot be a good thing. That is why I think Svelt looks pretty promising. Unlike React or Vue, Svelte is a compiler that knows at build time how things could change in your app, rather than waiting to do the work at run time, so there is no for Virtual DOMs and diffing at all.
 
@@ -51,6 +57,9 @@ There are more than just one rendering environments - for example, in the case o
 
 <div class='tip tip-left'><p>
 Actually instead of using "===", React uses "Object.is". But they are really just the same except for two cases: "NaN" and "0" vs. "-0"</p></div>
+
+<div class='tip tip-right'><p>
+Immutability and referential equality has its their overhead too - they lead to significant cloning and memory allocations.</p></div>
 
 State updates in React should always be done immutably, which is really no strangers to most of the React devs out there. But what are the reasons exactly for having immutability when updating states in React? The common answer you can find on the Internet is that mutation causes confusion about when and why data actually got updated, or where a change came from. But recently I just realized that there is another, arguably more important reason for not mutating state is that, React relies on shallow equality checks to compare the current props and previous props to avoid unnecessary re-renders when you opted in some optimization with either `React.memo`, `PureComponent` , `shouldComponentUpdate` etc. That means React determines whether a prop is a new value by doing something conceptually similar to `Object.keys(prevProps).some(key => prevProps[key] !== nextProps[key])`. _If_ you mutate, then the properties in the `props` stay the same referentially, which results in React assuming those components didn’t change at all. Therefore, it can result in components not rendering when you expected they would render.
 
