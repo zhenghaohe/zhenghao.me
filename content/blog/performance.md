@@ -55,20 +55,21 @@ When one talks about “loading speed”, one typically means networking perform
 
 <div class='tip tip-left'>
 <p>
-The amount of factors that need to be taken into consideration when deciding on whether to use Client-side rendering or SSR is not trivial. 
+The amount of factors that need to be taken into consideration when deciding on whether to use Client-side rendering or SSR is not trivial. I couldn't possibly cover all of them in this blog post.
 </p>
 </div>
 
 6. For client side rendered applications, they do not have all of the user specific data from the beginning so they have to request everything to fill in the blanks. And those requests don’t start happening until the bundle is fully downloaded. You can use server side rendering to inline page data into the HTML, where you calculate the API data on the server side – and include it directly into the HTML response. That leads to reducing the initial page load time. But we still have to wait for the JS files to reach the user before anything can be interactive (hydration).
-   - If you content is highly cacheable, you can take advantage of pre-rendered HTML e.g. Gatsby
 
-7) A more radical idea: if we are dealing with a homepage, we might only use React on the server to do server side rendering and use only ship vanilla JavaScript down to the clients. <a href="https://twitter.com/netflixuie/status/923374215041912833?lang=en">Netflix has done this to their landing page</a> and it resulted in a 50% performance improvement
+   - If you content is highly cacheable, you can take advantage of pre-rendered HTMLs or Static Site Generation e.g. Gatsby
+
+7. A more radical idea: If we are dealing with a homepage, we might only use React on the server to do server side rendering and use only ship vanilla JavaScript down to the clients. <a href="https://twitter.com/netflixuie/status/923374215041912833?lang=en">Netflix has done this to their landing page</a> and it resulted in a 50% performance improvement
 
 ## 2. the rendering performance
 
-Most browser use Just-in-time compilation, that means your app compiles on the clients’ machine. Especially for single page apps, You are sending your user the entire application for them to compile and build.
+Most browser use Just-in-time compilation, that means your app compiles on the clients’ machines. Especially for single page apps, You are sending your users the entire application for them to compile and build.
 
-1. You can cache JS files in the HTTP cache to take advantage of bytecode caching. Most modern browsers do this, the browser would have the bytecode cached so it doesn't pay the cost for compiling it.
+1. You can cache JS files in the HTTP cache to take advantage of <a href='https://blog.mozilla.org/javascript/2017/12/12/javascript-startup-bytecode-cache/'>bytecode caching</a>. Most modern browsers do this, the browser would have the bytecode cached so it doesn't pay the cost for compiling it again.
 
 <div class='tip tip-left'>
 <p>
@@ -78,36 +79,36 @@ Most browser use Just-in-time compilation, that means your app compiles on the c
 
 <div class='tip tip-right'>
 <p>
-Note that a Promise does not queue a task, as it does not exit the current event loop iteration. The scheduling algorithms for Promise is inherently susceptible to starvation, which creates a form of denial of service or deadlock. It is possible for <a href='https://html.spec.whatwg.org/multipage/webappapis.html#perform-a-microtask-checkpoint'>the microtask queue</a> to block your browser just like a infinite while loop.  	 
+Note that a Promise does not queue a task, as it does not exit the current event loop iteration. The scheduling algorithms for Promise is inherently susceptible to starvation. It is possible for <a href='https://html.spec.whatwg.org/multipage/webappapis.html#perform-a-microtask-checkpoint'>the microtask queue</a> to block your browser just like a infinite while loop.  	 
 </p>
 </div>
 
-2. Break up your synchronous JavaScript code into separate tasks that can run asynchronously as part of <a href='https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task'>a (macro)task queue</a>. Since JavaScript is single-threaded and when the browser is busy parsing and executing JavaScript code, it cannot run any event listeners at the same time. Here are a couple ways to do queue a task.
+2. Break up your synchronous JavaScript code into separate tasks that can run asynchronously as part of <a href='https://html.spec.whatwg.org/multipage/webappapis.html#queue-a-task'>a (macro)task queue</a>. Since JavaScript is single-threaded and with <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop#run-to-completion'>run-to-completion</a> modal, it cannot run any event listeners before the current task finishes. Here are a couple ways to do queue a task.
    - `window.setTimeout` and `window.setInterval`. However <a href='https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setTimeout#Timeouts_throttled_to_%E2%89%A5_4ms'>browsers throttle timers to ≥ 4ms.</a>
    - the Non-standard `Window.setImmediate()`
    - a lesser-known technique: `MessagePort.postMessage`: Currently the only API that does <a href='https://github.com/YuzuJS/setImmediate#postmessage'>queue a task synchronously</a>
-   - There are two more methods to schedule tasks - `requestIdleCallback` and `requestAnimationFrame`. They do not belong to either the macrotask or the microtask. I might write another blog post to talk about these different broswer scheduling APIs.
+   - There are one more method to schedule tasks - `requestIdleCallback`. It does not belong to either the macrotask or the microtask. I might write another blog post to talk about these different broswer scheduling APIs.
 3. code-splitting unused functionality, you not only reduce bundle init time, but also decrease the compilation time. The less JS code there is, the faster it compiles.
-
-4) You should use `defer` or `async` script attributes so that browser know that scripts can be downloaded in the background, without interrupting the document parsing. This can reduce the page loading time.
 
 <div class='tip tip-right'>
 <p>
-But probably should just use the defer attribute and put the script tags in the head tag <a href='https://flaviocopes.com/javascript-async-defer/#blocking-parsing'> according to this blog post</a>
+But probably it is best to just use the defer attribute and put the script tags in the head tag <a href='https://flaviocopes.com/javascript-async-defer/#blocking-parsing'> according to this blog post</a>
 </p>
 </div>
+
+4. You should use `defer` or `async` script attributes so that browser know that scripts can be downloaded in the background, without interrupting the document parsing. This can reduce the page loading time.
 
 5. Find ways to minimize the number of reflows and repaints the browser has to do when running your app.
 
    - When changing classes for stylings, try to change them at the lowest levels of the DOM tree.
    - Batch DOM manipulations - If you are using frameworks, you are effectively getting for free. For example, In React most of your state updates are batched automatically (except for asynchronous updates, that are running much later in a totally separate event loop call stack). It would write changes to Virtual DOM and does a diffing between the old and new Virtual DOM and make sure the only minimum required changes are done in the real DOM.
-   - Split CPU-hungry tasks into multiple macrotasks(not microtasks which would still block rendering) using zero delayed `setTimeout`. Here is a great <a href='https://javascript.info/event-loop'>tutorial</a> on that you can check out.
 
 <div class='tip tip-left'>
 <p>
-          React has been doing event delegation automatically since its first release. It attaches one handler per event type directly at the document node.  React 17 no longer attaches event handlers at the document level. Instead, it attaches them to the root DOM container into which React tree is rendered.
+          React has been doing event delegation automatically since its first release. It attaches one handler per event type directly at the document node. And this has changed a bit <a href='https://bigbinary.com/blog/react-17-delegates-events-to-root-instead-of-document'> since React 17</a>
 </p>
 </div>
+
 6. Review the number of event handlers you have on your site from time to time. Make sure you are using event capturing/bubbling to save memory (with React you are effectively getting for free). Also clean up the event handlers when an element is removed from the DOM to prevent memory leaks.
 
 7. Debounce various events
@@ -120,18 +121,21 @@ But probably should just use the defer attribute and put the script tags in the 
 
 1. Choose an appropriate format for images and compress them. - You can use `<picture>` tag for `webp` with a `jpg` fallback. Because `webp` is not supported by Safari.
 2. Preload things that you think will also be needed in a short time.
-3. Deduplicate network requests you make. - <a href='https://react-query.tanstack.com/'>React Query</a> makes this really easy.
+3. Be mindful of network requests you make: Are there components requesting the same reosources? Did you keep a cache of the responses and share it with other components? How do you fine tune your cached data-freshness at the app level and query level?
+   - Check out <a href='https://github.com/tannerlinsley/react-query'>React Query</a>
 
 <div class='tip tip-left'>
 <p>
-   "synchronous", in practice, means blocking. Check out <a href='https://twitter.com/acdlite/status/1344398786894966784'>this tweet</a> for more nuances about this word "synchronous"
+   "synchronous", in practice, means blocking. Check out <a href='https://twitter.com/acdlite/status/1344398786894966784'>this tweet</a> for more nuances about this word "synchronous". However "asynchronous" doesn't necessarily mean non-blocking - as micro tasks do not yield to any particular part of the event loop.
 </p>
 </div>
 
 4. Don't put too much stuff in your `localStorage`. <a href='https://www.janbambas.cz/new-faster-localstorage-in-firefox-21/'>Firefox does this</a>: they read the entire store into memory on page navigation, meaning that the more you stuff in LocalStorage, the more you impact page load time as well as memory costs.
+
    - `localStorage` is a synchronous API, you may wish to throttle or debounce the updates to localStorage. Because. it can cause performance problems if read/updated too rapidly.
      - There is one edge case to think about when debouncing writing to `localStorage`, that is if the user navigate away from the page before the debounced writing fires, the write would likely fail.
 
-5) Offload computationally intensive tasks to Service workers or Web workers.
+5. Offload computationally intensive tasks to Service workers or Web workers, which have been the de-facto standard for dealing with concurrent processes in JavaScript,
    - It comes with <a href='https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers#Transferring_data_to_and_from_workers_further_details'>the cost of serialization</a>
+
 6) You can mess around `window.navigator` to get to know the amount of memory the user's device has or <a href='https://twitter.com/umaar/status/897753290510913536'>their bandwidth</a> so you can decide whether to download some resources at all.
