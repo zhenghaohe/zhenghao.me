@@ -136,6 +136,7 @@ But probably it is best to just use the defer attribute and put the script tags 
      - There is one edge case to think about when debouncing writing to `localStorage`, that is if the user navigate away from the page before the debounced writing fires, the write would likely fail.
 
 5. Offload computationally intensive tasks to Service workers or Web workers, which have been the de-facto standard for dealing with concurrent processes in JavaScript,
+
    - It comes with <a href='https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers#Transferring_data_to_and_from_workers_further_details'>the cost of serialization</a>
 
-6) You can mess around `window.navigator` to get to know the amount of memory the user's device has or <a href='https://twitter.com/umaar/status/897753290510913536'>their bandwidth</a> so you can decide whether to download some resources at all.
+6. You can mess around `window.navigator` to get to know the amount of memory the user's device has or <a href='https://twitter.com/umaar/status/897753290510913536'>their bandwidth</a> so you can decide whether to download some resources at all.
