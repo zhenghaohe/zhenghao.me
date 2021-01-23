@@ -31,10 +31,18 @@ Check out <a href='https://web.dev/vitals/'>Web Vitals</a> to learn about these 
 
 When one talks about “loading speed”, one typically means networking performance. This is a list of low hanging fruits that you should be thinking about:
 
+<div class='tip tip-right'>
+<p>
+Little-known fact: <a href='https://tools.ietf.org/html/rfc7234#section-5.2.1'>according to the Spec</a>, both request (client) and response (server) can have `cache-control` header.
+</p>
+</div>
+
 1. Use HTTP cache headers to mark cacheable content and set cache durations. The browser will not ask for assets that it believes it already has recent versions of. Cacheing headers can be set in HTTP responses that let the browser know what it should and should not cache.
+
    - Probably a good idea to tweak `cache-control` per file type.
    - If you don't set `cache-control`, it doesn't mean no cache at all, but means each browser would cache the response differently. This could lead to some unexpected client-side bugs
    - You can even use a `cache-control: immutable` header to make the browser always consider the cache as valid and not send out a verification request to the server (<a href='https://engineering.fb.com/2017/01/26/web/this-browser-tweak-saved-60-of-requests-to-facebook/'>Facebook does this</a>). Use versioning e.g. `contenthash` to force the browser to re-download the cached file if it changes.
+
 2. putting assets on CDNs
 
    - CDNs are set up to be geographically near the people that are requesting them.
@@ -118,6 +126,12 @@ But probably it is best to just use the defer attribute and put the script tags 
 8. If you can using React, you can opt out of the default rendering behavior - rendering a component will, by default, cause all components inside of it to be rendered too, by using `React.memo`, or `React.pureComponent` to skip rendering a component. This means React will also skip rendering that entire subtree, because it's effectively putting a stop sign up to halt the default "render children recursively" behavior.
 
 ## 3. Misc.
+
+<div class='tip tip-right'>
+<p>
+   You can enable <a href='https://www.keycdn.com/blog/client-hints#what-are-client-hints'>client hints</a> in the HTTP reuqest header to instruct the server to look at certain parameters on users' devices when deciding how to deliver content.
+</p>
+</div>
 
 1. Choose an appropriate format for images and compress them. - You can use `<picture>` tag for `webp` with a `jpg` fallback. Because `webp` is not supported by Safari.
 2. Preload things that you think will also be needed in a short time.
