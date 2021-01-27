@@ -140,7 +140,7 @@ const FooterContainer = styled.div`
 
 const Wrapper = styled.article`
   display: grid;
-  max-width: 95vw;
+  max-width: 90vw;
   margin: 3rem auto 0;
   grid-gap: 10px 50px;
   grid-template-columns: 3fr 12fr 3fr;
