@@ -19,7 +19,7 @@ There are 8 basic data types in JavaScript. I am not going to cover them one by 
 
 <div class='tip tip-left'><p>Check out <a href='https://chromium.googlesource.com/v8/v8/+/4.4-lkgr/src/objects.h'>this source code snippet of V8</a> if you are interested in seeing an exhaustive list of things on the heap in JavaScript.</p></div>
 
-However, I would like to look at these different data types from a different angle - reference types i.e. objects and value types i.e. primitive types - number, string, etc. A value type holds the data within its own memory allocation. When they are referenced or copied, a new identical value will be created in `stack`, which is a continuous region of memory allocating local context for each executing function. And a reference type contains a pointer or reference to another memory location that holds the real data, which is allocated dynamically from the shared, unstructured pool of memory called `heap`. Because reference types represent the address of the variable rather than the data itself, assigning a reference variable to another doesn't copy the data automatically. Instead it creates a second copy of the reference, which refers to the same location of `heap` as the original value. Finally, the garbage collector frees them from `heap` when no one is referencing them. This is a vital distinction between objects and primitive, non-object types and it will play a key role in the implementation of deep copying.
+However, I would like to look at these different data types from a different angle - reference types i.e. objects and value types i.e. primitive types - number, string, etc. A value type holds the data within its own memory allocation. When they are referenced or copied, a new identical value will be created in `stack`, which is a continuous region of memory allocating local context for each executing function. On the other hand, a reference type contains a pointer or reference to another memory location that holds the real data, which is allocated dynamically from the shared, unstructured pool of memory called `heap`. Because reference types represent the address of the variable rather than the data itself, assigning a reference variable to another doesn't copy the data automatically. Instead it creates a second copy of the reference, which refers to the same location of `heap` as the original value. Finally, the garbage collector frees them from `heap` when no one is referencing them. This is a vital distinction between objects and primitive, non-object types and it will play a key role in the implementation of deep copying.
 
 ## Ways to check data types
 
@@ -35,7 +35,7 @@ typeof randomeVariableIDidNotDeclare // doesn't even throw an error
 
 So you can use the `typeof` operator to check the data types and it works fine for `number`, `string`, `undefined`, `boolean`, `symbol`, `function` but there are some pitfalls to watch out for when using `typeof` :
 
-- It is known bug that typeof null === 'object'. “The history of typeof null” describes this bug in details.
+- It is known bug that `typeof null === 'object'`. <a href='https://2ality.com/2013/10/typeof-null.html'>“The history of typeof null”</a> describes this bug in details.
 - It doesn't differentiate between different reference types except for functions.
 
 ```js
@@ -66,7 +66,7 @@ As you can see, neither is perfect and most of the time people have to leverage 
 
 Turns out there is a third, arguably better way to check data types in JavaScript - we can use `Object.prototype.toString`. It is a method that exists on `Object.prototype` , which returns a string value used for the description of an objects based on its <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/toStringTag'>`Symbol.toStringTag`</a>. Have you ever encountered an unexpected `[object Object]` bug? That was because the `toString` method got invoked before the your object was serialized properly.
 
-If you take a look at <a href='https://262.ecma-international.org/6.0/#sec-object.prototype.tostring'>its spec</a> and you will realize that it is actually the all-encompassing solution we have been looking for when it comes to check data types.
+If you <a href='https://262.ecma-international.org/6.0/#sec-object.prototype.tostring'>take a look at its spec</a> and you will realize that it is actually the all-encompassing solution we have been looking for when it comes to check data types.
 
 ```js
 Object.prototype.toString.call({}) // "[object Object]"
@@ -86,7 +86,7 @@ Object.prototype.toString.call(window) //"[object Window]
 
 <div class='tip tip-right'><p>Yes '123' and new String('123') are different things in JavaScript. <a href='https://twitter.com/jaffathecake/status/1086204098830049280'>Check out this twitter</a> to learn more about this idiosyncrasy of JavaScript</p></div>
 
-With a little bit of string processing using a regexp, we can come up with the following solution that can account for all cases.
+With a little bit of string processing using a `regexp`, we can come up with the following solution that can account for all cases.
 
 ```js
 function getType(obj) {
@@ -114,7 +114,7 @@ getType(new Date()) // "date"
 
 # Object
 
-An object in JavaScript is a set of a collection of properties, in the form of key-value pairs, where the key can be either a string or a symbol and the value can be either an accessor (has `get`/`set` methods) or a data property (has a value).
+An object in JavaScript is a set of a collection of properties, in the form of key-value pairs, where the key can be either a `string` or a `symbol` and the value can be either an accessor (has `get`/`set` methods) or a data property (has a value).
 
 Objects play two roles in JavaScript:
 
@@ -122,7 +122,7 @@ Objects play two roles in JavaScript:
 
 2. Dictionaries: Objects-as-dictionaries have a variable number of properties, whose keys are not known at development time. All of their values have the same type. A hash table is a specific way to implement a dictionary.
 
-before ES6, we have to use objects for both use cases. However, since `Map` was introduced in ES6, we should prefer `Map` when implementing a hash table or a dictionary. Defaulting to objects when a key/value structure is needed should really be considered an antipattern for modern JavaScript for a number of reasons:
+Before ES6, we have to use objects for both use cases. However, since `Map` was introduced in ES6, we should prefer `Map` when implementing a hash table or a dictionary. Defaulting to objects when a key/value structure is needed should really be considered an anti-pattern for modern JavaScript for a number of reasons:
 
 - `Map` is much faster when it comes to dynamically inserting/setting/deleting keys at runtime. It is easy to convince yourself by benchmarking these operations on `Map` and plain old objects and compare the results. But <a href='https://leetcode.com/problems/random-pick-with-weight/discuss/671804/Javascript-with-explanation-and-very-interesting-find-regarding-vs-Map'>this is one post</a> that I found out when I was grinding leetcode that really does a good job of driving home this point about the performance gain of choosing `Map` over objects. Basically this dude were brute forcing a `n(o)` approach to solve a binary search problem using `Map` and he didn't get timed out on it. But as soon as he switched to plain old object, the solution timed out. I thought that was pretty funny.
 
