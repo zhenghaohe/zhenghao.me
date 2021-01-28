@@ -8,7 +8,7 @@ description: >-
 tag: engineering
 ---
 
-This post is a growing collection of things that triggered so called “aha” moments throughout my journey of learning React.
+This post is a growing collection of things that triggered so called “aha” moments throughout my journey of learning React. Some people also call these "blogs that grow over time" a <a href='https://joelhooks.com/digital-garden'>digital garden</a>.
 
 <div class='tip tip-right'><p>An <a href="https://en.wikipedia.org/wiki/Eureka_effect"> “aha” moment</a> is a moment of sudden insight or clarity; when the subject matter suddenly makes sense. </p></div>
 
