@@ -19,7 +19,7 @@ There are 8 basic data types in JavaScript. I am not going to cover them one by 
 
 <div class='tip tip-left'><p>Check out <a href='https://chromium.googlesource.com/v8/v8/+/4.4-lkgr/src/objects.h'>this source code snippet of V8</a> if you are interested in seeing an exhaustive list of things on the heap in JavaScript.</p></div>
 
-However, I would like to look at these different data types from a different angle - reference types i.e. objects and value types i.e. primitive types - number, string, etc. A value type holds the data within its own memory allocation. When they are referenced or copied, a new identical value will be created in `stack`, which is a continuous region of memory allocating local context for each executing function. On the other hand, a reference type contains a pointer or reference to another memory location that holds the real data, which is allocated dynamically from the shared, unstructured pool of memory called `heap`. Because reference types represent the address of the variable rather than the data itself, assigning a reference variable to another doesn't copy the data automatically. Instead it creates a second copy of the reference, which refers to the same location of `heap` as the original value. Finally, the garbage collector frees them from `heap` when no one is referencing them. This is a vital distinction between objects and primitive, non-object types and it will play a key role in the implementation of deep copying.
+However, I would like to look at these different data types from a different angle - **reference types** i.e. objects and **value types** i.e. primitive types - number, string, etc. A value type holds the data within _its own memory allocation_. When they are referenced or copied, a new identical value will be created in `stack`, which is a continuous region of memory allocating local context for each executing function. On the other hand, a reference type contains a _pointer_ or _reference_ to another memory location that holds the real data, which is allocated dynamically from the shared, unstructured pool of memory called `heap`. Because reference types represent the address of the variable rather than the data itself, assigning a reference variable to another **doesn't** copy the data automatically. Instead it creates a second copy of the reference, which refers to the same location of `heap` as the original value. Finally, the garbage collector frees them from `heap` when no one is referencing them. This is a vital distinction between objects and non-object (primitive) types and it will play a key role in the implementation of deep copying.
 
 ## Ways to check data types
 
@@ -27,16 +27,16 @@ I am going to jump to a conclusion directly here: there is not a built-in way to
 
 ### the `typeof` operator
 
-First of all just a little fun fact: the typeof operator is the only operator in existence of the language that is able to reference a thing that doesn't exist and not throw an error. You can get away with something like this.
+First of all just a little fun fact: the `typeof` operator is the only operator in existence of the language that is able to reference a thing that _doesn't exist_ and not throw an error. You can get away with something like this.
 
 ```js
 typeof randomeVariableIDidNotDeclare // doesn't even throw an error
 ```
 
-So you can use the `typeof` operator to check the data types and it works fine for `number`, `string`, `undefined`, `boolean`, `symbol`, `function` but there are some pitfalls to watch out for when using `typeof` :
+You can use the `typeof` operator to check the data types and it works fine for `number`, `string`, `undefined`, `boolean`, `symbol`, `function` but there are some pitfalls to watch out for when using `typeof` :
 
 - It is known bug that `typeof null === 'object'`. <a href='https://2ality.com/2013/10/typeof-null.html'>“The history of typeof null”</a> describes this bug in details.
-- It doesn't differentiate between different reference types except for functions.
+- It doesn't differentiate between different reference types except for `function`.
 
 ```js
 typeof [] // 'object'
@@ -118,13 +118,13 @@ An object in JavaScript is a set of a collection of properties, in the form of k
 
 Objects play two roles in JavaScript:
 
-1. Records: Objects-as-records have a fixed number of properties, whose keys are known at development time. Their values can have different types.
+- Records: Objects-as-records have a fixed number of properties, whose keys are known at development time. Their values can have different types.
 
-2. Dictionaries: Objects-as-dictionaries have a variable number of properties, whose keys are not known at development time. All of their values have the same type. A hash table is a specific way to implement a dictionary.
+- Dictionaries: Objects-as-dictionaries have a variable number of properties, whose keys are not known at development time. All of their values have the same type. A hash table is a specific way to implement a dictionary.
 
 Before ES6, we have to use objects for both use cases. However, since `Map` was introduced in ES6, we should prefer `Map` when implementing a hash table or a dictionary. Defaulting to objects when a key/value structure is needed should really be considered an anti-pattern for modern JavaScript for a number of reasons:
 
-- `Map` is much faster when it comes to dynamically inserting/setting/deleting keys at runtime. It is easy to convince yourself by benchmarking these operations on `Map` and plain old objects and compare the results. But <a href='https://leetcode.com/problems/random-pick-with-weight/discuss/671804/Javascript-with-explanation-and-very-interesting-find-regarding-vs-Map'>this is one post</a> that I found out when I was grinding leetcode that really does a good job of driving home this point about the performance gain of choosing `Map` over objects. Basically this dude were brute forcing a `n(o)` approach to solve a binary search problem using `Map` and he didn't get timed out on it. But as soon as he switched to plain old object, the solution timed out. I thought that was pretty funny.
+- `Map` is much faster when it comes to dynamically inserting/setting/deleting keys at runtime. It is easy to convince yourself by benchmarking these operations on `Map` and plain old objects and compare the results. But <a href='https://leetcode.com/problems/random-pick-with-weight/discuss/671804/Javascript-with-explanation-and-very-interesting-find-regarding-vs-Map'>this is one post</a> that I found out when I was grinding leetcode really does a good job of driving home this point about the performance gain of choosing `Map` over objects. Basically this dude were brute forcing a `n(o)` approach to solve a binary search problem using `Map` and he didn't get timed out on it. But as soon as he switched to plain old object, the solution timed out. I thought that was pretty funny.
 
 - There are security caveats using objects as a hash table or dictionary. Dynamic keys can have rare name collisions with properties on `Object.prototype`, e.g. `hasOwnProperty` . In other words, the keys might pollute with other keys defined at the prototype chain. That opens the door for a form of attack called Prototype Pollution attack. <a href='https://github.com/HoLyVieR/prototype-pollution-nsec18/blob/master/paper/JavaScript_prototype_pollution_attack_in_NodeJS.pdf'>Here is a whole paper</a> on this security topic if you are interested.
 
@@ -134,11 +134,11 @@ There is no official definition for what a deep copying or a deep cloning is in 
 
 There have been mountains of tutorials nowadays on shallow copying and deep copying in JavaScript, most of which are kind of flawed or at least not comprehensive enough to be able to account for various edge cases. These are a couple aspects that most of the deep copying tutorials fall short:
 
-1. Non-enumberable properties on the object are not copied.
-2. Symbol keys on the object are not copied.
-3. Property descriptors of the properties on the object are not copied.
-4. The prototype the object is based on, i.e. the value of the internal `[[Prototype]]` property is not copied.
-5. Potential circular references are not addressed.
+- Non-enumberable properties on the object are not copied.
+- `Symbol` keys on the object are not copied.
+- Property descriptors of the properties on the object are not copied.
+- The prototype the object is based on, i.e. the value of the internal `[[Prototype]]` property is not copied.
+- Potential circular references are not addressed.
 
 ## Poor man's version
 
@@ -208,7 +208,7 @@ function deepCopy(target) {
 
 This solution seems fine and it probably is going to be an ok answer if you encounter this question under technical interview settings. However there are still a few cases where this solution just doesn't cut it:
 
-1. The current solution will just ignore the keys that are symbols since they are hidden from `Object.entries`, the same thing with any other properties that are non-enumerable. As a result, property descriptors are not respected or not copied into the new objects either.
+1. The current solution will just ignore the keys that are symbols since they are hidden from `Object.entries`, the same thing with any other properties that are **non-enumerable**. As a result, property descriptors are not respected or not copied into the new objects either.
 
 ```js
 const object = {
@@ -246,7 +246,7 @@ Let's address them all in the final version.
 
 ## Final version
 
-First, for symbol keys or keys are not enumerable, we cannot use either for...in loop or Object.keys to access them. However they can be revealed by `Reflect.ownKeys`. <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Enumerability_and_ownership_of_properties#detection_table '>Check out this MDN page</a> to learn more about it.
+First, for symbol keys or keys are not enumerable, we cannot use either `for...in` loop or `Object.keys` to access them. However they can be revealed by `Reflect.ownKeys`. <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Enumerability_and_ownership_of_properties#detection_table '>Check out this MDN page</a> to learn more about it.
 
 Second, to get all property descriptors at once, we can use the method `Object.getOwnPropertyDescriptors`, and together with `Object.create` and `Object.getPrototypeOf` we can copy the prototype along with the object.
 
