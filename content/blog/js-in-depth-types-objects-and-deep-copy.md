@@ -58,9 +58,35 @@ const array = [1, 2]
 array instanceof Array // true
 ```
 
-`instaceof` operator can correctly determine types for objects, but not for primitive types.
+`instaceof` operator can correctly determine types for objects, but **not** for primitive types.
 
 As you can see, neither is perfect and most of the time people have to leverage and combine both approaches to do type checking.
+
+By the way, since `instanceof` checks the constructor of an object, if you modify the prototype of an object during the runtime, the result of the `instanceof` check can change. Here is an example:
+
+```js
+const array = []
+
+array instanceof Array // true
+
+Object.setPrototypeOf(array, null)
+
+array instanceof Array // false
+```
+
+I recently learned that, surprisingly, `Array.isArray` does **not** work like `instanceof Array` - it checks the internal representation of an <a href='https://tc39.es/ecma262/#sec-array-exotic-objects'>“Array Exotic Object”</a>. That means, as long as the array **was** created using an array literal or the array constructor, `Array.isArray` is going to return `true`, even though it might not necessarily inherit from `Array.prototype`. Here is an example:
+
+```js
+const array = []
+
+Array.isArray(array) // true
+
+Object.setPrototypeOf(array, null)
+
+Array.isArray(array) // true
+```
+
+A lot times people are using `Array.isArray` to guard code that uses array methods. I just wanted to say this approach is actually not 100% robust.
 
 ### the `Object.prototype.toString` method
 
