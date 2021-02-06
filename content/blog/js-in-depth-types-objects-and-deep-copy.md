@@ -317,6 +317,10 @@ function deepCopy(target, cache = new WeakMap()) {
 
 However I need to point out that this solution is still not perfect. For example, it doesn't copy errors that are of the `Error` type. It is fair to say that implementing copying completely generically in JavaScript generally impossible.
 
+## Structured Clone
+
+There is another lesser-known technique: take advantage of the existing <a href='https://html.spec.whatwg.org/multipage/structured-data.html#structuredserializeinternal'>Structured Clone</a> algorithm to perform deep clone. However, it is not exposed directly. This is <a href='https://github.com/whatwg/html/issues/793'>an open issue</a> on the HTML spec where you can find the proposal of using this as the standard way for deep cloning. To leverage the structured clone algorithm, you have to either use `MessageChannel` to send yourself a message, or use the Historay API (surprising right?), which is really hacky.
+
 # Bonus
 
 I feel like grinding Leetcode might actually be a running theme in my blog. Here is a question on it called <a href='https://leetcode.com/problems/clone-graph/'>Clone Graph</a> that is basically asking you to deep copy an object with circular reference in it. Give it a try. And this is my solution:
