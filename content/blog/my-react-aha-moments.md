@@ -87,6 +87,10 @@ Over the years people have been questioning this default behaviour of React. Dan
 
 A following up question would be that, why is that React only does shallow comparison instead of deep comparison? One simple answer is because shallow comparison is relatively cheap with a time complexity of O(n). However even with linear time complexity, shallow comparison is not free. This is also why in normal rendering, **React does not care whether "props changed"** - it will render child components _unconditionally_ just because the parent rendered. Instead of diffing the input (props), React, by default, diffs the output (virtual DOMs).
 
+### A little more on Functional Programming in JavaScript
+
+While we are on this subject, treating objects as immutables is one of the principles of Functional Programming. I have seen some concerns about the performance of Functional Programming from a garbage collection standpoint since theoretically, it will produce a lot more garbage. In particular, they tend to allocate a large number of short-lived objects in Heap. However in the context of web development, in 99% of situations, it won't matter. V8 garbage collectors are <a href='https://en.wikipedia.org/wiki/Tracing_garbage_collection#Generational_GC_(ephemeral_GC)'>generational</a> so objects in Heap are grouped by their age or generation. This results in much faster collection cycles so short-lived objects are reclaimed quickly.
+
 ## 4. Why is that state updates in React may Be asynchronous?
 
 <div class='tip tip-right'><p>It comes from the official docs<a href="https://reactjs.org/docs/state-and-lifecycle.html#state-updates-may-be-asynchronous"> "State Updates May be Asynchronous"</a></p></div>
